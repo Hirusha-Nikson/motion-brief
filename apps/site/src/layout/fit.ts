@@ -1,6 +1,8 @@
 import type { Measure } from "./measure.js";
 
-export const LINE_HEIGHT = 1.15;
+import { LINE_HEIGHT } from "@motionbrief/brief";
+
+export { LINE_HEIGHT };
 
 export type FitProblem = "word-too-wide" | "too-many-lines" | "too-tall";
 

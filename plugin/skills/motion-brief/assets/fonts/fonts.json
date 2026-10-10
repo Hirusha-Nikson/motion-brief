@@ -1,0 +1,98 @@
+{
+  "Inter": {
+    "400": "Inter-400.ttf",
+    "700": "Inter-700.ttf"
+  },
+  "Roboto": {
+    "400": "Roboto-400.ttf",
+    "700": "Roboto-700.ttf"
+  },
+  "Open Sans": {
+    "400": "OpenSans-400.ttf",
+    "700": "OpenSans-700.ttf"
+  },
+  "Lato": {
+    "400": "Lato-400.ttf",
+    "700": "Lato-700.ttf"
+  },
+  "Montserrat": {
+    "400": "Montserrat-400.ttf",
+    "700": "Montserrat-700.ttf"
+  },
+  "Poppins": {
+    "400": "Poppins-400.ttf",
+    "700": "Poppins-700.ttf"
+  },
+  "DM Sans": {
+    "400": "DMSans-400.ttf",
+    "700": "DMSans-700.ttf"
+  },
+  "Manrope": {
+    "400": "Manrope-400.ttf",
+    "700": "Manrope-700.ttf"
+  },
+  "Work Sans": {
+    "400": "WorkSans-400.ttf",
+    "700": "WorkSans-700.ttf"
+  },
+  "IBM Plex Sans": {
+    "400": "IBMPlexSans-400.ttf",
+    "700": "IBMPlexSans-700.ttf"
+  },
+  "Space Grotesk": {
+    "400": "SpaceGrotesk-400.ttf",
+    "700": "SpaceGrotesk-700.ttf"
+  },
+  "Sora": {
+    "400": "Sora-400.ttf",
+    "700": "Sora-700.ttf"
+  },
+  "Outfit": {
+    "400": "Outfit-400.ttf",
+    "700": "Outfit-700.ttf"
+  },
+  "Plus Jakarta Sans": {
+    "400": "PlusJakartaSans-400.ttf",
+    "700": "PlusJakartaSans-700.ttf"
+  },
+  "Raleway": {
+    "400": "Raleway-400.ttf",
+    "700": "Raleway-700.ttf"
+  },
+  "Oswald": {
+    "400": "Oswald-400.ttf",
+    "700": "Oswald-700.ttf"
+  },
+  "Bebas Neue": {
+    "400": "BebasNeue-400.ttf"
+  },
+  "Anton": {
+    "400": "Anton-400.ttf"
+  },
+  "Archivo Black": {
+    "400": "ArchivoBlack-400.ttf"
+  },
+  "Playfair Display": {
+    "400": "PlayfairDisplay-400.ttf",
+    "700": "PlayfairDisplay-700.ttf"
+  },
+  "Merriweather": {
+    "400": "Merriweather-400.ttf",
+    "700": "Merriweather-700.ttf"
+  },
+  "Lora": {
+    "400": "Lora-400.ttf",
+    "700": "Lora-700.ttf"
+  },
+  "DM Serif Display": {
+    "400": "DMSerifDisplay-400.ttf"
+  },
+  "JetBrains Mono": {
+    "400": "JetBrainsMono-400.ttf",
+    "700": "JetBrainsMono-700.ttf"
+  },
+  "Space Mono": {
+    "400": "SpaceMono-400.ttf",
+    "700": "SpaceMono-700.ttf"
+  }
+}

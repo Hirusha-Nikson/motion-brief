@@ -70,7 +70,7 @@ export const DEFAULT_PALETTE = {
 } as const satisfies Record<(typeof PALETTE_ROLES)[number], string>;
 
 const HexColor = z.string().regex(/^#[0-9a-fA-F]{6}$/, "Use a 6-digit hex colour like #1a2b3c");
-const Sha256 = z.string().regex(/^[0-9a-f]{64}$/, "Expected a lowercase SHA-256 hex digest");
+export const Sha256 = z.string().regex(/^[0-9a-f]{64}$/, "Expected a lowercase SHA-256 hex digest");
 export const SceneIdSchema = z
   .string()
   .regex(

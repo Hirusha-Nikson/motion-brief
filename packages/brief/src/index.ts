@@ -1,5 +1,6 @@
 /** @motionbrief/brief: the motion-brief/v1 contract shared by the website and the skill. */
 export * from "./schema.js";
+export * from "./plan.js";
 export * from "./fonts.js";
 export * from "./presets.js";
 export * from "./styles.js";

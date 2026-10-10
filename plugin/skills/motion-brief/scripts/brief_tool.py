@@ -264,6 +264,9 @@ def check(text):
 
 
 def main(argv):
+    # Reports quote the user's text; Windows pipes default to a legacy code page.
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
     if len(argv) != 3 or argv[1] != "check":
         sys.stderr.write(__doc__)
         return 2

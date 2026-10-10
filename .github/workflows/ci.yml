@@ -22,6 +22,11 @@ jobs:
           node-version-file: .nvmrc
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      # The MP4 renderer's tests need these; without them they skip.
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - run: python -m pip install --quiet pillow numpy imageio-ffmpeg
       - run: pnpm build
       - run: pnpm typecheck
       - run: pnpm lint

@@ -1,0 +1,136 @@
+{
+  "note": "Generated from packages/brief. Do not edit by hand.",
+  "lineHeight": 1.15,
+  "roleSizeUnits": {
+    "headline": 11,
+    "subhead": 6,
+    "body": 5.5,
+    "label": 5,
+    "stat": 26,
+    "quote": 7.5,
+    "attribution": 4.5,
+    "cta": 6
+  },
+  "textRoles": {
+    "headline": {
+      "font": "heading",
+      "weight": 700,
+      "color": "text"
+    },
+    "subhead": {
+      "font": "body",
+      "weight": 400,
+      "color": "mutedText"
+    },
+    "body": {
+      "font": "body",
+      "weight": 400,
+      "color": "text"
+    },
+    "label": {
+      "font": "body",
+      "weight": 700,
+      "color": "mutedText"
+    },
+    "stat": {
+      "font": "heading",
+      "weight": 700,
+      "color": "primary"
+    },
+    "quote": {
+      "font": "heading",
+      "weight": 400,
+      "color": "text"
+    },
+    "attribution": {
+      "font": "body",
+      "weight": 400,
+      "color": "mutedText"
+    },
+    "cta": {
+      "font": "heading",
+      "weight": 700,
+      "color": "background",
+      "fill": "primary"
+    }
+  },
+  "motionStyles": {
+    "calm": {
+      "easing": [
+        0.33,
+        1,
+        0.68,
+        1
+      ],
+      "entranceMs": 700,
+      "exitMs": 500,
+      "staggerMs": 120
+    },
+    "snappy": {
+      "easing": [
+        0.22,
+        1,
+        0.36,
+        1
+      ],
+      "entranceMs": 400,
+      "exitMs": 300,
+      "staggerMs": 60
+    },
+    "playful": {
+      "easing": [
+        0.34,
+        1.56,
+        0.64,
+        1
+      ],
+      "entranceMs": 550,
+      "exitMs": 350,
+      "staggerMs": 90
+    }
+  },
+  "contrastPairs": [
+    {
+      "fg": "text",
+      "bg": "background",
+      "usage": "headlines, body and quotes",
+      "severity": "error"
+    },
+    {
+      "fg": "mutedText",
+      "bg": "background",
+      "usage": "subheads, labels and attributions",
+      "severity": "error"
+    },
+    {
+      "fg": "primary",
+      "bg": "background",
+      "usage": "stat numbers",
+      "severity": "error"
+    },
+    {
+      "fg": "text",
+      "bg": "surface",
+      "usage": "text on cards",
+      "severity": "error"
+    },
+    {
+      "fg": "mutedText",
+      "bg": "surface",
+      "usage": "labels on cards",
+      "severity": "error"
+    },
+    {
+      "fg": "background",
+      "bg": "primary",
+      "usage": "the call-to-action button",
+      "severity": "error"
+    },
+    {
+      "fg": "accent",
+      "bg": "background",
+      "usage": "highlights",
+      "severity": "warning"
+    }
+  ]
+}

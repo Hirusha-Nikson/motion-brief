@@ -1,25 +1,25 @@
 # Voice-over, captions and music
 
-Claude Motion builds animations from code and exports MP4. Check what the Motion template supports for audio before promising any.
+## MP4 route (default when there's any audio)
 
-## Voice-over (`voiceover.enabled`)
+`scripts/render_video.py` handles all of this; see [mp4-route.md](mp4-route.md).
 
-- **Narration:** write it into the plan, one line per scene, in `voiceover.language`. In `script` mode, the narration is the user's script.
-- **Timing:** each line takes `words × 60 ÷ voiceover.wordsPerMinute` seconds. The scene must be at least that long plus about 0.5 s.
-- **Voice:** `voiceover.voice` is the user's preference in their own words. If it's empty, choose a voice that suits the video.
-- **If Motion can add audio:** add the narration and keep it in sync with the scenes.
-- **If Motion can't add audio:** still time the scenes to the narration. After presenting the video, tell the user in one line: "Audio isn't supported in Claude Motion yet: record or generate the narration below and add it to the exported MP4 in any video editor." Then give the full narration with scene timestamps.
+- **Voice-over:** narration comes from each scene's `voiceover` line. Engines are tried in order:
+  1. `edge-tts`: natural neural voices; needs the user to approve `speech.platform.bing.com`.
+  2. `gTTS`: Google's voice; needs `translate.google.com`.
+  3. `espeak-ng`: offline and robotic, if installed.
+  4. Silence, with captions and `narration.txt`.
 
-## Captions (`captions.enabled`)
+  The voice follows `voiceover.language`, and "male" or "female" in `voiceover.voice`. Each scene stretches to fit its spoken line.
 
-- **Placement:** in a caption band at the bottom of the safe zone, at most `captions.maxLines` lines, at or above the minimum font size, in `--text` on a `--surface` or `--background` scrim.
-- **`line` style:** show one phrase at a time, in sync with the narration.
-- **`karaoke` style:** the full phrase shows, and each word highlights in `--accent` as it's spoken.
-- **Layout:** keep other text out of the caption band while captions are on.
-- **Without voice-over:** captions show the key on-screen message only when the plan calls for it.
+- **Captions:** when `captions.enabled`, captions are burned in at the bottom of the safe zone, timed to the spoken words, and also written to `captions.srt`.
+- **Music:** when `music.enabled`, a file the user attached is used with `--music FILE`. Otherwise the renderer generates an original background bed in the motion style's tempo. It's quieter under narration and fades in and out.
+- **Engine used:** tell the user which voice engine was used. If it fell back to `espeak` or silence, tell them which website approval would give a natural voice, and offer to render again.
 
-## Music (`music.enabled`)
+## Claude Motion route (silent videos only)
 
-- **Genre:** use `music.genre` if given. If it's empty, pick a style that suits the topic and motion style, and name it under Assumptions in the plan.
-- **Mix:** keep music quiet under narration, and fade it in and out.
-- **If Motion can't add audio:** tell the user which genre and tempo to use and add it after export, in the same one line as the voice-over note.
+Claude Motion builds animations from code and exports MP4 without audio. Use it only when voice-over and music are both off. If captions are on, they show the key on-screen message only where the plan calls for it.
+
+## HTML route
+
+No audio. Give the narration as text with timestamps, and tell the user that turning on code execution gets them an MP4 with voice-over.

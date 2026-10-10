@@ -1,4 +1,5 @@
 import {
+  ROLE_SIZE_UNITS,
   TEXT_ROLE_STYLE,
   contentBox,
   type BriefContent,
@@ -55,18 +56,6 @@ export interface SceneLayout {
   /** 1% of the area's shorter side. */
   unit: number;
 }
-
-/** Starting size of each role, in `unit`s. Text shrinks from here, never below the brief's minimum. */
-export const ROLE_SIZE_UNITS: Record<TextRole, number> = {
-  headline: 11,
-  subhead: 6,
-  body: 5.5,
-  label: 5,
-  stat: 26,
-  quote: 7.5,
-  attribution: 4.5,
-  cta: 6,
-};
 
 type LayoutBrief = Pick<BriefContent, "canvas" | "safeZone" | "captions" | "rules" | "theme">;
 

@@ -1,7 +1,13 @@
 import { CONTRAST_PAIRS } from "./checks.js";
 import { PLATFORM_PRESETS, TYPICAL_LENGTH_SEC, type PresetPlatform } from "./presets.js";
 import { MOTION_STYLE_IDS, PLATFORMS, SCENE_TYPES, TEXT_ROLES } from "./schema.js";
-import { MOTION_STYLES, SCENE_TYPE_INFO, TEXT_ROLE_STYLE } from "./styles.js";
+import {
+  LINE_HEIGHT,
+  MOTION_STYLES,
+  ROLE_SIZE_UNITS,
+  SCENE_TYPE_INFO,
+  TEXT_ROLE_STYLE,
+} from "./styles.js";
 
 /** `refs/styles.md` for the skill: motion styles, text styles, contrast pairs, scene patterns. */
 export function renderStylesMarkdown(): string {
@@ -54,6 +60,37 @@ export function renderStylesMarkdown(): string {
     ...scenes,
     "",
   ].join("\n");
+}
+
+function bezier(easing: string): number[] {
+  const m = /cubic-bezier\(([^)]+)\)/.exec(easing);
+  if (!m?.[1]) throw new Error(`Not a cubic-bezier: ${easing}`);
+  return m[1].split(",").map((n) => Number(n.trim()));
+}
+
+/** `refs/render-config.json`: the style tables scripts/render_video.py renders with. */
+export function renderConfigJson(): Record<string, unknown> {
+  return {
+    note: "Generated from packages/brief. Do not edit by hand.",
+    lineHeight: LINE_HEIGHT,
+    roleSizeUnits: ROLE_SIZE_UNITS,
+    textRoles: TEXT_ROLE_STYLE,
+    motionStyles: Object.fromEntries(
+      MOTION_STYLE_IDS.map((id) => {
+        const s = MOTION_STYLES[id];
+        return [
+          id,
+          {
+            easing: bezier(s.easing),
+            entranceMs: s.entranceMs,
+            exitMs: s.exitMs,
+            staggerMs: s.staggerMs,
+          },
+        ];
+      }),
+    ),
+    contrastPairs: CONTRAST_PAIRS,
+  };
 }
 
 /** `refs/presets.json`: platform canvases for scripts/brief_tool.py. */

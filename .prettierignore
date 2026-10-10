@@ -10,5 +10,8 @@ plugin/skills/motion-brief/refs/motion-edit.schema.json
 plugin/skills/motion-brief/refs/platforms.md
 plugin/skills/motion-brief/refs/styles.md
 plugin/skills/motion-brief/refs/presets.json
+plugin/skills/motion-brief/refs/motion-plan.schema.json
+plugin/skills/motion-brief/refs/render-config.json
+plugin/skills/motion-brief/assets
 examples/*/*
 !examples/*/source.json

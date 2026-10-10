@@ -10,7 +10,7 @@ import {
 import { PALETTE_ROLES, TEXT_ROLES, type Brief, type MotionEdit } from "./schema.js";
 import { MOTION_STYLES, SCENE_TYPE_INFO, TEXT_ROLE_STYLE } from "./styles.js";
 
-export const BUILD_TRIGGER = "Use the motion-brief skill to create this video in Claude Motion.";
+export const BUILD_TRIGGER = "Use the motion-brief skill to create this video.";
 export const EDIT_TRIGGER = "Use the motion-brief skill to apply this edit to the existing video.";
 
 /** Where users get the icon skill. */
@@ -154,7 +154,7 @@ export function compileBriefInstructions(brief: Brief): string {
     "",
     "1. **Write the script and scene plan first.** For each scene give its time range, purpose, on-screen text, voice-over line (if any), visuals and motion graphics, transition and icons. Include the hook and every fact or figure the video shows.",
     "2. **Show the plan and ask the user to confirm or change it.** Don't build until they confirm. This is the only question to ask.",
-    "3. **Build the video in Claude Motion** following the confirmed plan and the hard rules.",
+    "3. **Build the video** following the confirmed plan and the hard rules: render a downloadable MP4 in the code sandbox when there's voice-over or music or Claude Motion isn't available; otherwise a Claude Motion animation.",
     "4. **Check it before presenting:** safe zone, text fit, contrast and timing. List anything you couldn't resolve.",
     "",
     "### Hard rules",

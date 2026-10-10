@@ -1,8 +1,8 @@
 import { buildExample, exampleFiles, type ExampleSource } from "./examples.js";
-import { briefJsonSchema, editJsonSchema } from "./json-schema.js";
+import { briefJsonSchema, editJsonSchema, planJsonSchema } from "./json-schema.js";
 import { renderPlatformsMarkdown } from "./presets.js";
 import { fail, ok, type Result } from "./result.js";
-import { presetsJson, renderStylesMarkdown } from "./skill-refs.js";
+import { presetsJson, renderConfigJson, renderStylesMarkdown } from "./skill-refs.js";
 
 /** The skill folder; its `refs/` holds the generated copies of the contract. */
 export const SKILL_DIR = "plugin/skills/motion-brief";
@@ -23,6 +23,8 @@ export function generatedFiles(
     [`${SKILL_DIR}/refs/platforms.md`]: renderPlatformsMarkdown(),
     [`${SKILL_DIR}/refs/styles.md`]: renderStylesMarkdown(),
     [`${SKILL_DIR}/refs/presets.json`]: json(presetsJson()),
+    [`${SKILL_DIR}/refs/motion-plan.schema.json`]: json(planJsonSchema()),
+    [`${SKILL_DIR}/refs/render-config.json`]: json(renderConfigJson()),
   };
   const errors: string[] = [];
   for (const [name, source] of Object.entries(sources)) {

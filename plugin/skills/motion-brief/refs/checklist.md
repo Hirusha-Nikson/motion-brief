@@ -1,6 +1,8 @@
 # Self-check
 
-Run this before presenting the video. For each scene, check three moments: after the entrance settles, the middle, and just before the exit. Fix any failure, then check that scene again, up to 3 passes in total.
+On the MP4 route, `scripts/render_video.py` measures safe zone, fit, font size, overlap, contrast and reading time itself and writes `report.json`. Fix its failures, look at every still, and check the whole-video items below by hand.
+
+On the other routes, run this whole list before presenting the video. For each scene, check three moments: after the entrance settles, the middle, and just before the exit. Fix any failure, then check that scene again, up to 3 passes in total.
 
 ## Every scene
 

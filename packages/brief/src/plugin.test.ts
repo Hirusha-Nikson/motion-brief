@@ -109,6 +109,11 @@ function findPython(): string | null {
 }
 
 const python = findPython();
+// Run the scripts with Python's default stdout encoding, as in a plain Windows terminal,
+// so a shell that forces UTF-8 can't hide encoding bugs.
+const pythonEnv: NodeJS.ProcessEnv = { ...process.env };
+delete pythonEnv.PYTHONIOENCODING;
+delete pythonEnv.PYTHONUTF8;
 const tmp = mkdtempSync(join(tmpdir(), "motion-brief-"));
 afterAll(() => rmSync(tmp, { recursive: true, force: true }));
 
@@ -125,6 +130,7 @@ function runTool(text: string): Report {
   writeFileSync(file, text, "utf8");
   const r = spawnSync(python!, [join(root, SKILL_DIR, "scripts/brief_tool.py"), "check", file], {
     encoding: "utf8",
+    env: pythonEnv,
   });
   if (r.status !== 0 && r.status !== 1) throw new Error(r.stderr);
   return JSON.parse(r.stdout) as Report;
@@ -198,6 +204,232 @@ describe.skipIf(!python)("scripts/brief_tool.py", () => {
   });
 });
 
+// ---- scripts/render_video.py renders every pattern and checks itself ----
+
+const canRender =
+  python !== null &&
+  spawnSync(python, ["-c", "import PIL, numpy, imageio_ffmpeg"], { encoding: "utf8" }).status === 0;
+
+function render(args: string[]) {
+  const r = spawnSync(python!, [join(root, SKILL_DIR, "scripts/render_video.py"), ...args], {
+    encoding: "utf8",
+    timeout: 240_000,
+    env: pythonEnv,
+  });
+  return { status: r.status, out: r.stdout, err: r.stderr };
+}
+
+describe.skipIf(!canRender)("scripts/render_video.py", () => {
+  const brief = readJson(join(root, EXAMPLES_DIR, "reels-explainer-vo/brief.json"));
+  const say = (s: string) => ({ voiceover: s });
+  const plan = {
+    schema: "motion-plan/v1",
+    briefHash: brief.hash,
+    title: "Every pattern",
+    scenes: [
+      {
+        id: "s1",
+        pattern: "title",
+        durationSec: 4,
+        text: [
+          { role: "headline", text: "Money that grows" },
+          { role: "subhead", text: "A short guide" },
+        ],
+        ...say("Meet compound interest."),
+        transition: "slide-up",
+      },
+      {
+        id: "s2",
+        pattern: "kinetic-text",
+        durationSec: 4,
+        text: [{ role: "headline", text: "Interest on interest" }],
+        ...say("You earn on what you earned."),
+        transition: "fade",
+      },
+      {
+        id: "s3",
+        pattern: "bullets",
+        durationSec: 5,
+        text: [
+          { role: "headline", text: "Three habits" },
+          { role: "body", text: "Start early" },
+          { role: "body", text: "Add monthly" },
+          { role: "body", text: "Leave it" },
+        ],
+        transition: "slide-left",
+      },
+      {
+        id: "s4",
+        pattern: "stat",
+        durationSec: 4,
+        text: [
+          { role: "stat", text: "7.6x" },
+          { role: "label", text: "in 30 years" },
+        ],
+        stat: { value: 7.6, suffix: "x", decimals: 1 },
+        transition: "pop",
+      },
+      {
+        id: "s5",
+        pattern: "chart",
+        durationSec: 5,
+        text: [{ role: "headline", text: "$1,000 at 7%" }],
+        chart: {
+          values: [1000, 1967, 7612],
+          labels: ["Today", "10 years", "30 years"],
+          prefix: "$",
+        },
+        transition: "wipe",
+      },
+      {
+        id: "s6",
+        pattern: "icon-grid",
+        durationSec: 4,
+        text: [
+          { role: "headline", text: "Tools" },
+          { role: "label", text: "Docker" },
+        ],
+        icons: ["docker"],
+        transition: "zoom",
+      },
+      {
+        id: "s7",
+        pattern: "image-focus",
+        durationSec: 4,
+        text: [{ role: "headline", text: "Your plan" }],
+        image: "missing.png",
+        transition: "fade",
+      },
+      {
+        id: "s8",
+        pattern: "quote",
+        durationSec: 4,
+        text: [
+          { role: "quote", text: "Time is your best friend." },
+          { role: "attribution", text: "Sample quote" },
+        ],
+        transition: "fade",
+      },
+      {
+        id: "s9",
+        pattern: "comparison",
+        durationSec: 5,
+        text: [
+          { role: "headline", text: "Early vs late" },
+          { role: "label", text: "Start at 25" },
+          { role: "label", text: "Start at 35" },
+        ],
+        transition: "slide-up",
+      },
+      {
+        id: "s10",
+        pattern: "cta",
+        durationSec: 4,
+        text: [
+          { role: "headline", text: "Start today" },
+          { role: "cta", text: "Follow for part 2" },
+        ],
+        ...say("Follow for part two."),
+        transition: "pop",
+      },
+    ],
+  };
+
+  it("renders every pattern to an MP4 that passes its own checks", () => {
+    const dir = mkdtempSync(join(tmp, "render-"));
+    writeFileSync(join(dir, "brief.json"), JSON.stringify(brief));
+    writeFileSync(join(dir, "plan.json"), JSON.stringify(plan));
+    const out = join(dir, "out");
+    const r = render([
+      "--brief",
+      join(dir, "brief.json"),
+      "--plan",
+      join(dir, "plan.json"),
+      "--out",
+      out,
+      "--tts",
+      "none",
+      "--scale",
+      "0.25",
+    ]);
+    const report = readJson(join(out, "report.json")) as {
+      ok: boolean;
+      failures: string[];
+      warnings: string[];
+      checks: Record<string, boolean>;
+      scenes: unknown[];
+      durationSec: number;
+    };
+    expect(report.failures, r.err).toEqual([]);
+    expect(r.status).toBe(0);
+    expect(report.checks).toEqual({
+      safeZone: true,
+      textFit: true,
+      contrast: true,
+      overlap: true,
+      timing: true,
+    });
+    expect(report.scenes).toHaveLength(10);
+    expect(report.durationSec).toBeCloseTo(43, 0);
+    expect(report.warnings.join("\n")).toMatch(/Image "missing.png" wasn't found/);
+
+    expect(readFileSync(join(out, "video.mp4")).length).toBeGreaterThan(10_000);
+    expect(readdirSync(join(out, "stills"))).toHaveLength(10);
+    // Captions are timed from the narration text even when no voice engine is available.
+    expect(readFileSync(join(out, "captions.srt"), "utf8")).toMatch(/^1\n00:00:00,350 --> /);
+    expect(readFileSync(join(out, "narration.txt"), "utf8")).toContain("s10: Follow for part two.");
+  });
+
+  it("flags text that can't fit, without failing the render", () => {
+    const dir = mkdtempSync(join(tmp, "render-"));
+    writeFileSync(join(dir, "brief.json"), JSON.stringify(brief));
+    const long = {
+      ...plan,
+      scenes: [
+        {
+          id: "s1",
+          pattern: "stat",
+          durationSec: 6,
+          text: [{ role: "stat", text: "Supercalifragilisticexpialidocious" }],
+        },
+      ],
+    };
+    writeFileSync(join(dir, "plan.json"), JSON.stringify(long));
+    const r = render([
+      "--brief",
+      join(dir, "brief.json"),
+      "--plan",
+      join(dir, "plan.json"),
+      "--out",
+      join(dir, "out"),
+      "--stills-only",
+      "--scale",
+      "0.25",
+    ]);
+    expect(r.status).toBe(1);
+    expect(r.out).toMatch(/doesn't fit at the minimum size \(word-too-wide\)/);
+  });
+
+  it("rejects an invalid plan before rendering", () => {
+    const dir = mkdtempSync(join(tmp, "render-"));
+    writeFileSync(join(dir, "brief.json"), JSON.stringify(brief));
+    writeFileSync(
+      join(dir, "plan.json"),
+      JSON.stringify({ ...plan, scenes: [{ id: "s1", pattern: "slideshow", durationSec: 3 }] }),
+    );
+    const r = render([
+      "--brief",
+      join(dir, "brief.json"),
+      "--plan",
+      join(dir, "plan.json"),
+      "--out",
+      join(dir, "out"),
+    ]);
+    expect(r.status).toBe(2);
+    expect(r.out).toMatch(/plan\.scenes\[0\]\.pattern: must be one of/);
+  });
+});
+
 describe("pnpm package", () => {
   it("builds a skill zip and a plugin zip with the right layout", () => {
     const r = spawnSync(process.execPath, [join(root, "scripts/package-plugin.mjs")], {
@@ -212,6 +444,10 @@ describe("pnpm package", () => {
         "motion-brief/SKILL.md",
         "motion-brief/scripts/brief_tool.py",
         "motion-brief/refs/motion-brief.schema.json",
+        "motion-brief/refs/motion-plan.schema.json",
+        "motion-brief/scripts/render_video.py",
+        "motion-brief/assets/fonts/fonts.json",
+        "motion-brief/assets/fonts/SpaceGrotesk-700.ttf",
       ]),
     );
 

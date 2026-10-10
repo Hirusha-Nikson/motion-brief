@@ -3,7 +3,8 @@
 ## Changes asked in conversation
 
 - **Scope:** change only what the user asked for. Keep every other scene, word, colour, timing and transition the same.
-- **Same artifact:** edit the existing Claude Motion animation; don't rebuild it from scratch.
+- **MP4 route:** change only the affected scenes in `plan.json` and run `scripts/render_video.py` again with the same `--out` folder. Narration that didn't change comes from `out/.vo-cache`, so it isn't generated again and sounds identical.
+- **Claude Motion:** edit the existing animation; don't rebuild it from scratch.
 - **Ripple effects:** if a change shifts timing (for example, a longer scene), keep the other scenes' content and adjust only their start times.
 - **Re-check:** run [checklist.md](checklist.md) on the scenes you touched, plus the whole-video checks if the length changed.
 - **Report:** list exactly what changed, in one short list.

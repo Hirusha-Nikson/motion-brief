@@ -1,17 +1,16 @@
-# When Claude Motion isn't available
+# Routes other than the MP4 route
 
-Claude Motion is in beta on Team and Enterprise plans; Enterprise owners turn it on under Organization settings → Artifacts. If you can't create a Motion animation, use the first route that works, and say in one line which route you used and why.
+## Claude Motion
 
-## 1. HTML animation artifact
+Claude Motion is in beta on Team and Enterprise plans; Enterprise owners turn it on under Organization settings → Artifacts. Use it only for videos without voice-over or music, because it can't add audio. Apply [build-rules.md](build-rules.md) and [checklist.md](checklist.md) on top of the Motion template's conventions. The user downloads the result with Export → MP4.
 
-Build a self-contained HTML artifact that follows every rule in [build-rules.md](build-rules.md) and [checklist.md](checklist.md), plus:
+## HTML animation (no code execution, no Claude Motion)
+
+Only when the sandbox can't run code. Tell the user in one line that turning on Settings → Capabilities → **Code execution and file creation** gets them a downloadable MP4 with voice-over instead.
+
+Build a self-contained HTML artifact that follows [build-rules.md](build-rules.md) and [checklist.md](checklist.md), plus:
 
 - **Stage:** a stage of exactly `canvas.width × canvas.height` px, scaled down with a CSS transform to fit the viewport, never reflowed.
-- **Timeline:** one timeline drives all animation from the current time, so it can be scrubbed. Use `requestAnimationFrame` and no CSS transitions that run on their own.
+- **Timeline:** one timeline drives all animation from the current time, using `requestAnimationFrame` and no CSS transitions that run on their own.
 - **Controls:** play/pause, a frame scrubber, and a current-time display, all outside the stage.
 - **Fonts:** Google Fonts, loaded before the timeline starts.
-- **Export:** tell the user that a screen recording is the quickest way to get a video file from this route.
-
-## 2. Remotion in Claude Code
-
-For an MP4 rendered from code, with real voice-over, the user can run the same brief through the Remotion route in Claude Code (coming in a later MotionBrief release). Mention it only when the HTML route won't do, for example when the user needs an MP4 with audio.

@@ -64,6 +64,24 @@ export interface TextRoleStyle {
   fill?: PaletteRole;
 }
 
+/** Line height for all text, as a multiple of the font size. */
+export const LINE_HEIGHT = 1.15;
+
+/**
+ * Starting size of each role, in units of 1% of the layout area's shorter side. Text shrinks
+ * from here, never below the brief's minimum. Shared by the site preview and the MP4 renderer.
+ */
+export const ROLE_SIZE_UNITS: Record<TextRole, number> = {
+  headline: 11,
+  subhead: 6,
+  body: 5.5,
+  label: 5,
+  stat: 26,
+  quote: 7.5,
+  attribution: 4.5,
+  cta: 6,
+};
+
 /** How each text role is set. The site's style preview and the compiled prompt both follow this. */
 export const TEXT_ROLE_STYLE: Record<TextRole, TextRoleStyle> = {
   headline: { font: "heading", weight: 700, color: "text" },
