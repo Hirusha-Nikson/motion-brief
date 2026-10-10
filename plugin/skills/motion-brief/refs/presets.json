@@ -1,0 +1,93 @@
+{
+  "note": "Generated from packages/brief. Do not edit by hand.",
+  "platforms": {
+    "reels": {
+      "label": "Instagram Reels",
+      "width": 1080,
+      "height": 1920,
+      "typicalSec": [
+        15,
+        60
+      ]
+    },
+    "tiktok": {
+      "label": "TikTok",
+      "width": 1080,
+      "height": 1920,
+      "typicalSec": [
+        15,
+        60
+      ]
+    },
+    "shorts": {
+      "label": "YouTube Shorts",
+      "width": 1080,
+      "height": 1920,
+      "typicalSec": [
+        15,
+        60
+      ]
+    },
+    "youtube": {
+      "label": "YouTube (16:9)",
+      "width": 1920,
+      "height": 1080,
+      "typicalSec": [
+        60,
+        180
+      ]
+    },
+    "linkedin-16x9": {
+      "label": "LinkedIn (16:9)",
+      "width": 1920,
+      "height": 1080,
+      "typicalSec": [
+        15,
+        60
+      ]
+    },
+    "linkedin-1x1": {
+      "label": "LinkedIn (1:1)",
+      "width": 1080,
+      "height": 1080,
+      "typicalSec": [
+        15,
+        60
+      ]
+    },
+    "linkedin-4x5": {
+      "label": "LinkedIn (4:5)",
+      "width": 1080,
+      "height": 1350,
+      "typicalSec": [
+        15,
+        60
+      ]
+    },
+    "square": {
+      "label": "Square (1:1)",
+      "width": 1080,
+      "height": 1080,
+      "typicalSec": [
+        15,
+        60
+      ]
+    },
+    "presentation-16x9": {
+      "label": "Presentation (16:9)",
+      "width": 1920,
+      "height": 1080,
+      "typicalSec": [
+        30,
+        120
+      ]
+    },
+    "custom": {
+      "typicalSec": [
+        15,
+        90
+      ]
+    }
+  },
+  "minContentShare": 0.25
+}

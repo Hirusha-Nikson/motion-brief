@@ -1,0 +1,17 @@
+{
+  "name": "motion-brief",
+  "owner": {
+    "name": "Hirusha Nikson",
+    "url": "https://github.com/Hirusha-Nikson"
+  },
+  "description": "MotionBrief: describe a video on the MotionBrief website, paste the prompt into Claude, and get a motion video built in Claude Motion.",
+  "plugins": [
+    {
+      "name": "motion-brief",
+      "source": "./plugin",
+      "description": "Turns a MotionBrief prompt into a motion video in Claude Motion, with a script you confirm first and a self-check.",
+      "category": "design",
+      "tags": ["video", "motion", "animation"]
+    }
+  ]
+}

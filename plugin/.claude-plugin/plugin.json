@@ -1,0 +1,13 @@
+{
+  "name": "motion-brief",
+  "displayName": "MotionBrief",
+  "version": "0.1.0",
+  "description": "Turns a MotionBrief prompt into a motion video in Claude Motion: writes the script, gets your confirmation, then builds with strict safe-zone, fit, colour and timing rules and a self-check.",
+  "author": {
+    "name": "Hirusha Nikson",
+    "url": "https://github.com/Hirusha-Nikson"
+  },
+  "homepage": "https://hirusha-nikson.github.io/motion-brief/",
+  "repository": "https://github.com/Hirusha-Nikson/motion-brief",
+  "keywords": ["motion", "video", "animation", "claude-motion", "brief"]
+}

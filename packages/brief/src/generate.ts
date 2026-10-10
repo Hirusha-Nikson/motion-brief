@@ -2,22 +2,27 @@ import { buildExample, exampleFiles, type ExampleSource } from "./examples.js";
 import { briefJsonSchema, editJsonSchema } from "./json-schema.js";
 import { renderPlatformsMarkdown } from "./presets.js";
 import { fail, ok, type Result } from "./result.js";
+import { presetsJson, renderStylesMarkdown } from "./skill-refs.js";
 
-/** Where generated files go, relative to the repo root. */
-export const GENERATED_DIR = "packages/brief/generated";
+/** The skill folder; its `refs/` holds the generated copies of the contract. */
+export const SKILL_DIR = "plugin/skills/motion-brief";
 export const EXAMPLES_DIR = "examples";
 
+const json = (v: unknown) => `${JSON.stringify(v, null, 2)}\n`;
+
 /**
- * Every generated file (repo-relative path → content): JSON Schemas, platforms.md
- * and the outputs of each example source.
+ * Every generated file (repo-relative path → content): the skill's JSON Schemas and
+ * reference tables, and the outputs of each example source.
  */
 export function generatedFiles(
   sources: Record<string, ExampleSource>,
 ): Result<Record<string, string>> {
   const files: Record<string, string> = {
-    [`${GENERATED_DIR}/motion-brief.schema.json`]: `${JSON.stringify(briefJsonSchema(), null, 2)}\n`,
-    [`${GENERATED_DIR}/motion-edit.schema.json`]: `${JSON.stringify(editJsonSchema(), null, 2)}\n`,
-    [`${GENERATED_DIR}/platforms.md`]: renderPlatformsMarkdown(),
+    [`${SKILL_DIR}/refs/motion-brief.schema.json`]: json(briefJsonSchema()),
+    [`${SKILL_DIR}/refs/motion-edit.schema.json`]: json(editJsonSchema()),
+    [`${SKILL_DIR}/refs/platforms.md`]: renderPlatformsMarkdown(),
+    [`${SKILL_DIR}/refs/styles.md`]: renderStylesMarkdown(),
+    [`${SKILL_DIR}/refs/presets.json`]: json(presetsJson()),
   };
   const errors: string[] = [];
   for (const [name, source] of Object.entries(sources)) {

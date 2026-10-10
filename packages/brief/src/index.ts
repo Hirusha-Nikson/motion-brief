@@ -16,3 +16,4 @@ export * from "./json-schema.js";
 export * from "./checks.js";
 export * from "./examples.js";
 export * from "./generate.js";
+export * from "./skill-refs.js";
