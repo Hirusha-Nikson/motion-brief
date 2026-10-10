@@ -1,0 +1,72 @@
+{
+  "description": "Reels explainer with voice-over and karaoke captions. Edit: rewrite one scene's voice-over.",
+  "brief": {
+    "id": "example-reels-explainer-vo",
+    "createdAt": "2026-10-10T00:00:00.000Z",
+    "platform": "reels",
+    "audience": "People new to investing",
+    "purpose": "Explain compound interest in under 40 seconds",
+    "theme": {
+      "palette": {
+        "background": "#fff7ed",
+        "surface": "#ffedd5",
+        "primary": "#c2410c",
+        "accent": "#6d28d9",
+        "text": "#1c1917",
+        "mutedText": "#57534e"
+      },
+      "fonts": { "heading": "Poppins", "body": "Inter" },
+      "motionStyle": "playful"
+    },
+    "voiceover": {
+      "enabled": true,
+      "voice": "warm-female",
+      "language": "en-US",
+      "wordsPerMinute": 150,
+      "pronunciations": { "S&P": "S and P" }
+    },
+    "captions": { "style": "karaoke" },
+    "scenes": [
+      {
+        "type": "title",
+        "onScreenText": ["Money that makes money"],
+        "voText": "Want your money to work while you sleep? Meet compound interest."
+      },
+      {
+        "type": "kinetic-text",
+        "onScreenText": ["Interest on your interest"],
+        "voText": "Each year you earn interest not just on what you saved, but on the interest you already earned."
+      },
+      {
+        "type": "chart",
+        "onScreenText": ["$1,000 at 7% a year", "10 years: $1,967", "30 years: $7,612"],
+        "voText": "Put one thousand dollars away at seven percent. In ten years it nearly doubles. In thirty, it's over seven times bigger."
+      },
+      {
+        "type": "bullets",
+        "onScreenText": [
+          "Make it work for you",
+          "Start early",
+          "Add a little every month",
+          "Don't touch it"
+        ],
+        "voText": "So start early, add a little every month to something like an S&P index fund, and leave it alone."
+      },
+      {
+        "type": "cta",
+        "onScreenText": ["Start with $10 today", "Follow for part 2"],
+        "voText": "Even ten dollars counts. Follow for part two."
+      }
+    ]
+  },
+  "edit": {
+    "description": "Rewrite the chart scene's voice-over (scene s3 only).",
+    "ops": [
+      {
+        "op": "replace",
+        "path": "/scenes/2/voText",
+        "value": "One thousand dollars at seven percent nearly doubles in ten years, and grows more than seven times in thirty."
+      }
+    ]
+  }
+}

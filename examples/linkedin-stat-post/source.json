@@ -1,0 +1,42 @@
+{
+  "description": "LinkedIn square stat post, calm style, no audio. Edit: change the primary colour, which affects every scene.",
+  "brief": {
+    "id": "example-linkedin-stat-post",
+    "createdAt": "2026-10-10T00:00:00.000Z",
+    "platform": "linkedin-1x1",
+    "audience": "HR and people leaders",
+    "purpose": "Make the case for flexible hours with one memorable number",
+    "theme": {
+      "palette": {
+        "background": "#ffffff",
+        "surface": "#f1f5f9",
+        "primary": "#2563eb",
+        "accent": "#047857",
+        "text": "#0f172a",
+        "mutedText": "#475569"
+      },
+      "fonts": { "heading": "Plus Jakarta Sans", "body": "Inter" },
+      "motionStyle": "calm",
+      "cornerRadius": 16
+    },
+    "scenes": [
+      {
+        "type": "stat",
+        "onScreenText": ["73%", "want flexible hours", "Sample survey of 2,000 employees"]
+      },
+      {
+        "type": "chart",
+        "onScreenText": [
+          "Flexibility vs retention",
+          "Flexible teams: 12% turnover",
+          "Fixed hours: 21% turnover"
+        ]
+      },
+      { "type": "cta", "onScreenText": ["Read the full report", "Link in comments"] }
+    ]
+  },
+  "edit": {
+    "description": "Darken the primary colour. A theme change affects every scene.",
+    "ops": [{ "op": "replace", "path": "/theme/palette/primary", "value": "#1e40af" }]
+  }
+}
