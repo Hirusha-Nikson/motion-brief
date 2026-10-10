@@ -1,0 +1,14 @@
+node_modules/
+dist/
+out/
+coverage/
+*.tsbuildinfo
+.DS_Store
+
+# Secrets: API keys live only in the user's local environment
+.env
+.env.*
+!.env.example
+
+# Generated per-project state
+.motion/

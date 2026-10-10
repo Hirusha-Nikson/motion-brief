@@ -1,0 +1,12 @@
+{
+  "name": "@motionbrief/site",
+  "version": "0.0.0",
+  "description": "Brief builder with live preview, deployed to GitHub Pages",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  }
+}

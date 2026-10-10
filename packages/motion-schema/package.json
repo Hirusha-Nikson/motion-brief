@@ -1,0 +1,22 @@
+{
+  "name": "@motionbrief/motion-schema",
+  "version": "0.0.0",
+  "description": "Zod schema, presets, estimate, block parse/serialize and patch for motion-brief/v1",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  }
+}
