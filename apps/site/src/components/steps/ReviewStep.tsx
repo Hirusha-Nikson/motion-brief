@@ -1,6 +1,9 @@
 import { PLATFORM_PRESETS, aspectRatio, compileBriefPrompt } from "@motionbrief/brief";
 import { useBuilder } from "../../context.js";
 import { ExportPanel } from "../ExportPanel.js";
+
+/** GitHub `owner/repo` users add as a plugin marketplace in Claude. */
+const PLUGIN_MARKETPLACE = "Hirusha-Nikson/motion-brief";
 import { IssuesPanel } from "../IssuesPanel.js";
 
 export function ReviewStep() {
@@ -47,13 +50,20 @@ export function ReviewStep() {
       <section className="panel next-steps" aria-labelledby="next-title">
         <h2 id="next-title">What happens next</h2>
         <ol>
-          <li>Copy or download the prompt.</li>
           <li>
-            Open Claude with the MotionBrief plugin installed (install steps arrive with the
-            plugin), then paste the prompt.
+            Install the MotionBrief plugin once: in Claude, open{" "}
+            <a href="https://claude.ai/customize/plugins" target="_blank" rel="noreferrer">
+              Customize → Plugins
+            </a>
+            , choose <strong>Add → Add marketplace</strong>, enter <code>{PLUGIN_MARKETPLACE}</code>
+            , then add <strong>MotionBrief</strong>.
           </li>
+          <li>Copy or download the prompt and paste it into a new chat.</li>
           <li>Claude writes the script and scene plan and asks you to confirm or change it.</li>
-          <li>Claude builds the video in Claude Motion and checks it before showing you.</li>
+          <li>
+            Claude builds the video in Claude Motion (Team and Enterprise plans) and checks it
+            before showing you. On other plans it builds an HTML animation instead.
+          </li>
         </ol>
       </section>
 

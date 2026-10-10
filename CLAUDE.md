@@ -47,24 +47,27 @@ GitHub repo: `Hirusha-Nikson/motion-brief`. npm scope: `@motionbrief` (placehold
 
 Run from the repo root (Node >= 22.12, pnpm 10):
 
-| Task           | Command                                                      |
-| -------------- | ------------------------------------------------------------ |
-| Install        | `pnpm i`                                                     |
-| Build all      | `pnpm -r build` (or `pnpm build`)                            |
-| Test all       | `pnpm -r test` (or `pnpm test`)                              |
-| Typecheck all  | `pnpm typecheck`                                             |
-| Lint           | `pnpm lint`                                                  |
-| Format / check | `pnpm format` / `pnpm format:check`                          |
-| One package    | `pnpm --filter @motionbrief/<name> <build\|test\|typecheck>` |
-| Regenerate     | `pnpm --filter @motionbrief/brief generate`                  |
-| Site dev       | `pnpm --filter @motionbrief/site dev`                        |
-| Site build     | `pnpm --filter @motionbrief/site build` (then `preview`)     |
+| Task           | Command                                                        |
+| -------------- | -------------------------------------------------------------- |
+| Install        | `pnpm i`                                                       |
+| Build all      | `pnpm -r build` (or `pnpm build`)                              |
+| Test all       | `pnpm -r test` (or `pnpm test`)                                |
+| Typecheck all  | `pnpm typecheck`                                               |
+| Lint           | `pnpm lint`                                                    |
+| Format / check | `pnpm format` / `pnpm format:check`                            |
+| One package    | `pnpm --filter @motionbrief/<name> <build\|test\|typecheck>`   |
+| Regenerate     | `pnpm --filter @motionbrief/brief generate`                    |
+| Plugin zips    | `pnpm package` (writes `dist/motion-brief-{skill,plugin}.zip`) |
+| Site dev       | `pnpm --filter @motionbrief/site dev`                          |
+| Site build     | `pnpm --filter @motionbrief/site build` (then `preview`)       |
 
 Package names: `brief`, `site`.
 
 The site imports `@motionbrief/brief` from its source (Vite alias + tsconfig `paths`), so it never needs a stale build. Its layout engine (`apps/site/src/layout/`) renders the style preview's sample frames. Shared, render-free checks live in `packages/brief/src/checks.ts`. Unfinished drafts are restored with `BriefDraftSchema`.
 
-`generate` rewrites `packages/brief/generated/` (JSON Schemas, `platforms.md`) and every `examples/*/` file except `source.json`. Run it after changing `packages/brief` or an example source; a test fails when they're stale. Never edit generated files by hand.
+`generate` rewrites the skill's generated references in `plugin/skills/motion-brief/refs/` (`motion-brief.schema.json`, `motion-edit.schema.json`, `platforms.md`, `styles.md`, `presets.json`) and every `examples/*/` file except `source.json`.
+
+The plugin lives in `plugin/`: `.claude-plugin/plugin.json`, the main `skills/motion-brief/` (SKILL.md, hand-written `refs/*.md`, `scripts/brief_tool.py`), and the command skills `build`, `edit`, `estimate` and `check`. The root `.claude-plugin/marketplace.json` lists it. `brief_tool.py` is stdlib-only Python and must agree with `packages/brief` (hash, validation); `packages/brief/src/plugin.test.ts` checks that, plus the documented plugin and skill rules. claude.ai chat ignores agents and hooks and refuses a top-level `bin/`. Run it after changing `packages/brief` or an example source; a test fails when they're stale. Never edit generated files by hand.
 
 ## Code conventions
 

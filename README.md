@@ -7,7 +7,7 @@ Make Claude produce motion videos without the usual problems: overflowing text, 
 
 Claude Motion requires a Team or Enterprise plan. Without it, the skill falls back to an HTML animation artifact, or to an optional Remotion route in Claude Code.
 
-> Status: the website builder works (Phase 2 of [`CLAUDE_CODE_PROMPT.md`](CLAUDE_CODE_PROMPT.md)). The Claude skill that reads the prompt arrives in Phase 4.
+> Status: the website and the Claude plugin both work. Manual test results in Claude are recorded in [`docs/test-log.md`](docs/test-log.md).
 
 ## Quick start
 
@@ -28,9 +28,39 @@ The **style preview** shows sample frames at the real size with your safe zone, 
 
 Everything stays in your browser. Drafts autosave locally, share links carry the brief in the URL, and the site never asks for API keys. Fonts load from Google Fonts.
 
-## Installing the skill
+## Installing the plugin
 
-_Coming in Phase 4: add this repo as a plugin marketplace, or upload `motion-brief-skill.zip` as a skill. Includes which plugin parts work in chat vs Claude Code._
+**In claude.ai or the Claude desktop app** (once per account):
+
+1. Open [Customize → Plugins](https://claude.ai/customize/plugins).
+2. Choose **Add → Add marketplace** and enter `Hirusha-Nikson/motion-brief`.
+3. Add **MotionBrief** from the list.
+
+The plugin is saved to your account, so it also appears in Cowork and Claude Code.
+
+**In Claude Code:**
+
+```
+/plugin marketplace add Hirusha-Nikson/motion-brief
+/plugin install motion-brief@motion-brief
+```
+
+**Without the marketplace:** run `pnpm package`. Then upload `dist/motion-brief-plugin.zip` with **Customize → Plugins → Add → Upload plugin**, or upload only the skill, `dist/motion-brief-skill.zip`, with **Customize → Skills**. The skill alone has no slash commands.
+
+### What works where
+
+| Part                                                          | Chat (web, desktop, mobile)             | Cowork                    | Claude Code |
+| ------------------------------------------------------------- | --------------------------------------- | ------------------------- | ----------- |
+| `motion-brief` skill: reads the prompt, plans, builds, checks | ✓                                       | ✓                         | ✓           |
+| `/motion-brief:build`, `:edit`, `:estimate`, `:check`         | ✓ (loaded as skills, from the `/` menu) | ✓                         | ✓           |
+| `scripts/brief_tool.py` brief checker                         | ✓ with code execution turned on         | ✓                         | ✓           |
+| Claude Motion animation                                       | Team and Enterprise plans               | Team and Enterprise plans | –           |
+
+Without Claude Motion, the skill builds a self-contained HTML animation with play/pause and a scrubber, and says so. Sources: [Plugins](https://claude.com/docs/plugins/overview), [Plugin feature support](https://claude.com/docs/plugins/platform-support), [Get started with Claude Motion](https://support.claude.com/en/articles/17454997-get-started-with-claude-motion).
+
+### Using it
+
+Paste the prompt from the website into a new chat. Claude checks the brief, shows a script and scene plan with timings, on-screen text, narration and motion, and waits for **go**. It then builds the video and finishes with a `Checked: ✓ safe zone ✓ text fit ✓ contrast ✓ timing` line. To change something, ask in the same chat; Claude changes only that part.
 
 ## Development
 
