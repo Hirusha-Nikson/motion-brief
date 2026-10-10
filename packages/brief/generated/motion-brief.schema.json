@@ -19,21 +19,22 @@
       "format": "date-time",
       "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z))$"
     },
+    "topic": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 20000
+    },
+    "contentMode": {
+      "default": "idea",
+      "type": "string",
+      "enum": [
+        "idea",
+        "script"
+      ]
+    },
     "audience": {
-      "default": "General audience",
+      "default": "",
       "type": "string",
-      "minLength": 1,
-      "maxLength": 200
-    },
-    "purpose": {
-      "default": "Explain the topic clearly and memorably",
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 300
-    },
-    "whereItPlays": {
-      "type": "string",
-      "minLength": 1,
       "maxLength": 200
     },
     "platform": {
@@ -110,9 +111,17 @@
       "additionalProperties": false
     },
     "durationSec": {
-      "type": "number",
-      "minimum": 1,
-      "maximum": 600
+      "default": null,
+      "anyOf": [
+        {
+          "type": "number",
+          "minimum": 5,
+          "maximum": 600
+        },
+        {
+          "type": "null"
+        }
+      ]
     },
     "theme": {
       "type": "object",
@@ -257,13 +266,16 @@
       ],
       "additionalProperties": false
     },
-    "hook": {
+    "sceneMode": {
+      "default": "auto",
       "type": "string",
-      "minLength": 1,
-      "maxLength": 300
+      "enum": [
+        "auto",
+        "manual"
+      ]
     },
     "scenes": {
-      "minItems": 1,
+      "default": [],
       "maxItems": 40,
       "type": "array",
       "items": {
@@ -273,143 +285,46 @@
             "type": "string",
             "pattern": "^[a-z0-9][a-z0-9-]{0,31}$"
           },
-          "type": {
+          "idea": {
             "type": "string",
-            "enum": [
-              "title",
-              "kinetic-text",
-              "bullets",
-              "stat",
-              "chart",
-              "icon-grid",
-              "image-focus",
-              "quote",
-              "comparison",
-              "cta"
-            ]
-          },
-          "goal": {
-            "type": "string",
-            "maxLength": 300
+            "minLength": 1,
+            "maxLength": 2000
           },
           "durationSec": {
             "type": "number",
-            "minimum": 0.5,
+            "minimum": 1,
             "maximum": 120
-          },
-          "onScreenText": {
-            "default": [],
-            "maxItems": 12,
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "role": {
-                  "type": "string",
-                  "enum": [
-                    "headline",
-                    "subhead",
-                    "body",
-                    "label",
-                    "stat",
-                    "quote",
-                    "attribution",
-                    "cta"
-                  ]
-                },
-                "text": {
-                  "type": "string",
-                  "minLength": 1,
-                  "maxLength": 500
-                },
-                "maxChars": {
-                  "type": "integer",
-                  "minimum": 1,
-                  "maximum": 500
-                }
-              },
-              "required": [
-                "role",
-                "text",
-                "maxChars"
-              ],
-              "additionalProperties": false
-            }
-          },
-          "icons": {
-            "default": [],
-            "maxItems": 24,
-            "type": "array",
-            "items": {
-              "type": "string",
-              "pattern": "^[a-z0-9][a-z0-9.+-]{0,63}$"
-            }
-          },
-          "images": {
-            "default": [],
-            "maxItems": 8,
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string",
-                  "minLength": 1,
-                  "maxLength": 200
-                },
-                "containsText": {
-                  "default": false,
-                  "type": "boolean"
-                },
-                "textInImage": {
-                  "default": "",
-                  "type": "string",
-                  "maxLength": 500
-                },
-                "description": {
-                  "default": "",
-                  "type": "string",
-                  "maxLength": 300
-                }
-              },
-              "required": [
-                "name",
-                "containsText",
-                "textInImage",
-                "description"
-              ],
-              "additionalProperties": false
-            }
-          },
-          "transitionIn": {
-            "type": "string",
-            "enum": [
-              "cut",
-              "fade",
-              "slide-up",
-              "slide-left",
-              "wipe",
-              "zoom",
-              "pop"
-            ]
-          },
-          "voText": {
-            "type": "string",
-            "maxLength": 2000
           }
         },
         "required": [
           "id",
-          "type",
-          "goal",
-          "durationSec",
-          "onScreenText",
-          "icons",
-          "images",
-          "transitionIn"
+          "idea"
         ],
         "additionalProperties": false
       }
+    },
+    "notes": {
+      "default": [],
+      "maxItems": 30,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      }
+    },
+    "icons": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "enabled"
+      ],
+      "additionalProperties": false
     },
     "voiceover": {
       "type": "object",
@@ -418,44 +333,28 @@
           "default": false,
           "type": "boolean"
         },
-        "voice": {
-          "default": "default",
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 100
-        },
         "language": {
           "default": "en-US",
           "type": "string",
           "pattern": "^[a-zA-Z]{2,3}(-[a-zA-Z0-9]{2,8})*$"
+        },
+        "voice": {
+          "default": "",
+          "type": "string",
+          "maxLength": 100
         },
         "wordsPerMinute": {
           "default": 150,
           "type": "integer",
           "minimum": 80,
           "maximum": 240
-        },
-        "pronunciations": {
-          "default": {},
-          "type": "object",
-          "propertyNames": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 60
-          },
-          "additionalProperties": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 120
-          }
         }
       },
       "required": [
         "enabled",
-        "voice",
         "language",
-        "wordsPerMinute",
-        "pronunciations"
+        "voice",
+        "wordsPerMinute"
       ],
       "additionalProperties": false
     },
@@ -495,15 +394,15 @@
           "default": false,
           "type": "boolean"
         },
-        "note": {
+        "genre": {
           "default": "",
           "type": "string",
-          "maxLength": 300
+          "maxLength": 100
         }
       },
       "required": [
         "enabled",
-        "note"
+        "genre"
       ],
       "additionalProperties": false
     },
@@ -593,16 +492,18 @@
     "schema",
     "id",
     "createdAt",
+    "topic",
+    "contentMode",
     "audience",
-    "purpose",
-    "whereItPlays",
     "platform",
     "canvas",
     "safeZone",
     "durationSec",
     "theme",
-    "hook",
+    "sceneMode",
     "scenes",
+    "notes",
+    "icons",
     "voiceover",
     "captions",
     "music",

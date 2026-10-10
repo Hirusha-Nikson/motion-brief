@@ -1,4 +1,4 @@
-import type { MotionStyle, SceneType, TextRole, Transition } from "./schema.js";
+import type { MotionStyle, PaletteRole, SceneType, TextRole } from "./schema.js";
 
 export interface MotionStyleInfo {
   label: string;
@@ -9,7 +9,6 @@ export interface MotionStyleInfo {
   exitMs: number;
   /** Delay between items that enter one after another. */
   staggerMs: number;
-  defaultTransition: Transition;
 }
 
 export const MOTION_STYLES: Record<MotionStyle, MotionStyleInfo> = {
@@ -20,7 +19,6 @@ export const MOTION_STYLES: Record<MotionStyle, MotionStyleInfo> = {
     entranceMs: 700,
     exitMs: 500,
     staggerMs: 120,
-    defaultTransition: "fade",
   },
   snappy: {
     label: "Snappy",
@@ -29,7 +27,6 @@ export const MOTION_STYLES: Record<MotionStyle, MotionStyleInfo> = {
     entranceMs: 400,
     exitMs: 300,
     staggerMs: 60,
-    defaultTransition: "slide-up",
   },
   playful: {
     label: "Playful",
@@ -38,94 +35,43 @@ export const MOTION_STYLES: Record<MotionStyle, MotionStyleInfo> = {
     entranceMs: 550,
     exitMs: 350,
     staggerMs: 90,
-    defaultTransition: "pop",
   },
 };
 
-export interface SceneTypeInfo {
-  label: string;
-  defaultGoal: string;
-  defaultDurationSec: number;
-  /** Default role for each text item by position; the last role repeats. */
-  roles: readonly [TextRole, ...TextRole[]];
-}
-
-export const SCENE_TYPE_INFO: Record<SceneType, SceneTypeInfo> = {
-  title: {
-    label: "Title",
-    defaultGoal: "Open with the main message",
-    defaultDurationSec: 3.5,
-    roles: ["headline", "subhead"],
-  },
+/** Scene patterns Claude can compose a video from. */
+export const SCENE_TYPE_INFO: Record<SceneType, { label: string; description: string }> = {
+  title: { label: "Title", description: "A bold opening or section title" },
   "kinetic-text": {
     label: "Kinetic text",
-    defaultGoal: "Deliver one idea with animated typography",
-    defaultDurationSec: 4,
-    roles: ["headline", "body"],
+    description: "One idea delivered with animated typography",
   },
-  bullets: {
-    label: "Bullets",
-    defaultGoal: "List the key points one by one",
-    defaultDurationSec: 5,
-    roles: ["headline", "body"],
-  },
-  stat: {
-    label: "Stat",
-    defaultGoal: "Make one number land",
-    defaultDurationSec: 4,
-    roles: ["stat", "label", "body"],
-  },
-  chart: {
-    label: "Chart",
-    defaultGoal: "Show a trend or comparison in data",
-    defaultDurationSec: 6,
-    roles: ["headline", "label"],
-  },
-  "icon-grid": {
-    label: "Icon grid",
-    defaultGoal: "Show a set of tools or features",
-    defaultDurationSec: 5,
-    roles: ["headline", "label"],
-  },
-  "image-focus": {
-    label: "Image focus",
-    defaultGoal: "Spotlight an image",
-    defaultDurationSec: 4,
-    roles: ["headline", "body"],
-  },
-  quote: {
-    label: "Quote",
-    defaultGoal: "Let a voice speak",
-    defaultDurationSec: 5,
-    roles: ["quote", "attribution"],
-  },
-  comparison: {
-    label: "Comparison",
-    defaultGoal: "Contrast two options",
-    defaultDurationSec: 5,
-    roles: ["headline", "label"],
-  },
-  cta: {
-    label: "Call to action",
-    defaultGoal: "Tell viewers what to do next",
-    defaultDurationSec: 3.5,
-    roles: ["headline", "cta"],
-  },
+  bullets: { label: "Bullets", description: "Key points revealed one by one" },
+  stat: { label: "Stat", description: "One number that lands, with a counter" },
+  chart: { label: "Chart", description: "A trend or comparison drawn from data" },
+  "icon-grid": { label: "Icon grid", description: "A set of tools, brands or features" },
+  "image-focus": { label: "Image focus", description: "An attached image in the spotlight" },
+  quote: { label: "Quote", description: "A testimonial or quote with attribution" },
+  comparison: { label: "Comparison", description: "Two options side by side" },
+  cta: { label: "Call to action", description: "What viewers should do next" },
 };
 
-/** Default character budget per text role. */
-export const TEXT_ROLE_MAX_CHARS: Record<TextRole, number> = {
-  headline: 48,
-  subhead: 80,
-  body: 120,
-  label: 32,
-  stat: 12,
-  quote: 180,
-  attribution: 48,
-  cta: 32,
-};
-
-export function defaultRole(type: SceneType, index: number): TextRole {
-  const roles = SCENE_TYPE_INFO[type].roles;
-  return roles[Math.min(index, roles.length - 1)] ?? roles[0];
+export interface TextRoleStyle {
+  font: "heading" | "body";
+  weight: 400 | 700;
+  /** Palette colour of the text. */
+  color: PaletteRole;
+  /** Palette colour behind it, when the role sits on its own fill (CTA button). */
+  fill?: PaletteRole;
 }
+
+/** How each text role is set. The site's style preview and the compiled prompt both follow this. */
+export const TEXT_ROLE_STYLE: Record<TextRole, TextRoleStyle> = {
+  headline: { font: "heading", weight: 700, color: "text" },
+  subhead: { font: "body", weight: 400, color: "mutedText" },
+  body: { font: "body", weight: 400, color: "text" },
+  label: { font: "body", weight: 700, color: "mutedText" },
+  stat: { font: "heading", weight: 700, color: "primary" },
+  quote: { font: "heading", weight: 400, color: "text" },
+  attribution: { font: "body", weight: 400, color: "mutedText" },
+  cta: { font: "heading", weight: 700, color: "background", fill: "primary" },
+};

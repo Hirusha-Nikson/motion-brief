@@ -1,18 +1,14 @@
 import { describe, expect, it } from "vitest";
 import { contrastRatio } from "./color.js";
 import { PLATFORM_PRESETS, type PresetPlatform } from "./presets.js";
-import { briefInvariantIssues, DEFAULT_PALETTE, type Platform } from "./schema.js";
-
-const scene = (id: string, text = "Hi", maxChars = 48) => ({
-  id,
-  onScreenText: [{ text, maxChars }],
-});
+import { briefInvariantIssues, DEFAULT_PALETTE, type Platform, type SceneMode } from "./schema.js";
 
 const base = {
   platform: "reels" as Platform,
   canvas: { width: 1080, height: 1920, fps: 30 },
   safeZone: { top: 220, right: 140, bottom: 420, left: 60 },
-  scenes: [scene("s1")],
+  sceneMode: "auto" as SceneMode,
+  scenes: [] as { id: string }[],
 };
 
 describe("briefInvariantIssues", () => {
@@ -48,15 +44,13 @@ describe("briefInvariantIssues", () => {
     expect(issues.map((i) => i.path)).toEqual([["safeZone"]]);
   });
 
-  it("rejects duplicate scene ids and text over maxChars", () => {
-    const issues = briefInvariantIssues({
-      ...base,
-      scenes: [scene("s1"), scene("s1", "Too long", 3)],
-    });
-    expect(issues.map((i) => i.path)).toEqual([
-      ["scenes", 1, "id"],
-      ["scenes", 1, "onScreenText", 0, "text"],
+  it("requires an outline in manual mode and unique scene ids", () => {
+    expect(briefInvariantIssues({ ...base, sceneMode: "manual" }).map((i) => i.path)).toEqual([
+      ["scenes"],
     ]);
+    expect(
+      briefInvariantIssues({ ...base, scenes: [{ id: "s1" }, { id: "s1" }] }).map((i) => i.path),
+    ).toEqual([["scenes", 1, "id"]]);
   });
 
   it.each(Object.keys(PLATFORM_PRESETS) as PresetPlatform[])(

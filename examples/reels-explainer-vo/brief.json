@@ -2,9 +2,9 @@
   "schema": "motion-brief/v1",
   "id": "example-reels-explainer-vo",
   "createdAt": "2026-10-10T00:00:00.000Z",
+  "topic": "Want your money to work while you sleep? Meet compound interest. Each year you earn interest not just on what you saved, but on the interest you already earned. Put one thousand dollars away at seven percent. In ten years it nearly doubles. In thirty, it's over seven times bigger. So start early, add a little every month, and leave it alone. Even ten dollars counts. Follow for part two.",
+  "contentMode": "script",
   "audience": "People new to investing",
-  "purpose": "Explain compound interest in under 40 seconds",
-  "whereItPlays": "Instagram Reels feed, vertical, often watched without sound",
   "platform": "reels",
   "canvas": {
     "width": 1080,
@@ -17,7 +17,7 @@
     "bottom": 420,
     "left": 60
   },
-  "durationSec": 34.5,
+  "durationSec": 40,
   "theme": {
     "palette": {
       "background": "#fff7ed",
@@ -34,132 +34,19 @@
     "motionStyle": "playful",
     "cornerRadius": 24
   },
-  "hook": "Get \"Money that makes money\" on screen within 0.5 s with a bold playful entrance and keep it moving through 1.5 s.",
-  "scenes": [
-    {
-      "id": "s1",
-      "type": "title",
-      "goal": "Open with the main message",
-      "durationSec": 5,
-      "onScreenText": [
-        {
-          "role": "headline",
-          "text": "Money that makes money",
-          "maxChars": 48
-        }
-      ],
-      "icons": [],
-      "images": [],
-      "transitionIn": "cut",
-      "voText": "Want your money to work while you sleep? Meet compound interest."
-    },
-    {
-      "id": "s2",
-      "type": "kinetic-text",
-      "goal": "Deliver one idea with animated typography",
-      "durationSec": 8,
-      "onScreenText": [
-        {
-          "role": "headline",
-          "text": "Interest on your interest",
-          "maxChars": 48
-        }
-      ],
-      "icons": [],
-      "images": [],
-      "transitionIn": "pop",
-      "voText": "Each year you earn interest not just on what you saved, but on the interest you already earned."
-    },
-    {
-      "id": "s3",
-      "type": "chart",
-      "goal": "Show a trend or comparison in data",
-      "durationSec": 9,
-      "onScreenText": [
-        {
-          "role": "headline",
-          "text": "$1,000 at 7% a year",
-          "maxChars": 48
-        },
-        {
-          "role": "label",
-          "text": "10 years: $1,967",
-          "maxChars": 32
-        },
-        {
-          "role": "label",
-          "text": "30 years: $7,612",
-          "maxChars": 32
-        }
-      ],
-      "icons": [],
-      "images": [],
-      "transitionIn": "pop",
-      "voText": "Put one thousand dollars away at seven percent. In ten years it nearly doubles. In thirty, it's over seven times bigger."
-    },
-    {
-      "id": "s4",
-      "type": "bullets",
-      "goal": "List the key points one by one",
-      "durationSec": 8.5,
-      "onScreenText": [
-        {
-          "role": "headline",
-          "text": "Make it work for you",
-          "maxChars": 48
-        },
-        {
-          "role": "body",
-          "text": "Start early",
-          "maxChars": 120
-        },
-        {
-          "role": "body",
-          "text": "Add a little every month",
-          "maxChars": 120
-        },
-        {
-          "role": "body",
-          "text": "Don't touch it",
-          "maxChars": 120
-        }
-      ],
-      "icons": [],
-      "images": [],
-      "transitionIn": "pop",
-      "voText": "So start early, add a little every month to something like an S&P index fund, and leave it alone."
-    },
-    {
-      "id": "s5",
-      "type": "cta",
-      "goal": "Tell viewers what to do next",
-      "durationSec": 4,
-      "onScreenText": [
-        {
-          "role": "headline",
-          "text": "Start with $10 today",
-          "maxChars": 48
-        },
-        {
-          "role": "cta",
-          "text": "Follow for part 2",
-          "maxChars": 32
-        }
-      ],
-      "icons": [],
-      "images": [],
-      "transitionIn": "pop",
-      "voText": "Even ten dollars counts. Follow for part two."
-    }
+  "sceneMode": "auto",
+  "scenes": [],
+  "notes": [
+    "Show the growth as a chart: $1,000 → $1,967 (10 years) → $7,612 (30 years)"
   ],
+  "icons": {
+    "enabled": false
+  },
   "voiceover": {
     "enabled": true,
-    "voice": "warm-female",
     "language": "en-US",
-    "wordsPerMinute": 150,
-    "pronunciations": {
-      "S&P": "S and P"
-    }
+    "voice": "warm, friendly",
+    "wordsPerMinute": 150
   },
   "captions": {
     "enabled": true,
@@ -168,7 +55,7 @@
   },
   "music": {
     "enabled": false,
-    "note": ""
+    "genre": ""
   },
   "rules": {
     "minContrast": 4.5,
@@ -178,16 +65,16 @@
   },
   "estimate": {
     "tier": "medium",
-    "scenes": 5,
-    "durationSec": 34.5,
+    "scenes": 7,
+    "durationSec": 40,
     "complexityNotes": [
-      "5 scenes over 34.5 s",
-      "1 chart scene",
-      "1 kinetic text scene",
-      "Voice-over: 421 characters (~30.8 s of speech at 150 wpm)",
-      "Karaoke captions: word-by-word highlighting"
+      "About 7 scenes, planned by Claude",
+      "40 s long",
+      "1 note to follow",
+      "Voice-over from your script: 389 characters",
+      "Karaoke captions"
     ],
-    "voCharacters": 421
+    "voCharacters": 389
   },
-  "hash": "0ec66d2af0a67dc858c978e451a02a66cc04b30150a89a7b39f382e3b0a73a5d"
+  "hash": "0e53694eb182dd0f0f743a9bdf98dac238cd566aecb0940ad3f03ea5e11ab9b6"
 }

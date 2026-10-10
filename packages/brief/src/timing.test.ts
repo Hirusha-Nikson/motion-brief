@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { contrastRatio } from "./color.js";
 import { googleFontsUrl } from "./fonts.js";
-import { countWords, formatTimestamp, sceneTimeline, voDurationSec } from "./timing.js";
+import { countWords, round1, voDurationSec } from "./timing.js";
 
 describe("timing", () => {
   it("counts words", () => {
@@ -13,23 +13,8 @@ describe("timing", () => {
     expect(voDurationSec("a b c d e", { wordsPerMinute: 150 })).toBe(2);
   });
 
-  it("builds a timeline without float drift", () => {
-    const t = sceneTimeline([
-      { id: "a", durationSec: 0.1 },
-      { id: "b", durationSec: 0.2 },
-      { id: "c", durationSec: 3.5 },
-    ]);
-    expect(t).toEqual([
-      { id: "a", start: 0, end: 0.1 },
-      { id: "b", start: 0.1, end: 0.3 },
-      { id: "c", start: 0.3, end: 3.8 },
-    ]);
-  });
-
-  it("formats timestamps", () => {
-    expect(formatTimestamp(0)).toBe("0:00.0");
-    expect(formatTimestamp(75.25)).toBe("1:15.3");
-    expect(formatTimestamp(9.96)).toBe("0:10.0");
+  it("rounds to tenths", () => {
+    expect(round1(0.1 + 0.2)).toBe(0.3);
   });
 });
 

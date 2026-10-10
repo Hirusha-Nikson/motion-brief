@@ -16,10 +16,8 @@ const brief = unwrap(
   expandBrief(
     {
       platform: "square",
-      scenes: [
-        { type: "title", onScreenText: ["Hello"] },
-        { type: "cta", onScreenText: ["Go", "Now"] },
-      ],
+      topic: "Hello world, in motion",
+      scenes: ["Say hello", "Say goodbye"],
     },
     opts,
   ),
@@ -102,7 +100,7 @@ describe("parseBriefBlock", () => {
 describe("parseEditBlock", () => {
   it("round-trips an edit block", () => {
     const edited = structuredClone(brief);
-    edited.scenes[1]!.onScreenText[0]!.text = "Go go";
+    edited.scenes[1]!.idea = "Wave goodbye";
     const edit = unwrap(createEdit(brief, edited));
     expect(unwrap(parseEditBlock(`Please apply:\n${serializeEditBlock(edit)}`))).toEqual(edit);
   });

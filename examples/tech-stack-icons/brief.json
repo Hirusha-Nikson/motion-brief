@@ -2,9 +2,9 @@
   "schema": "motion-brief/v1",
   "id": "example-tech-stack-icons",
   "createdAt": "2026-10-10T00:00:00.000Z",
+  "topic": "Our web stack, layer by layer: React and TypeScript with Vite on the frontend, Node.js, PostgreSQL and Docker on the backend, shipped with GitHub Actions to Vercel.",
+  "contentMode": "idea",
   "audience": "Developers choosing a web stack",
-  "purpose": "Show the team's stack, layer by layer",
-  "whereItPlays": "YouTube Shorts feed, vertical, usually watched with sound",
   "platform": "shorts",
   "canvas": {
     "width": 1080,
@@ -17,7 +17,7 @@
     "bottom": 420,
     "left": 60
   },
-  "durationSec": 22,
+  "durationSec": null,
   "theme": {
     "palette": {
       "background": "#09090b",
@@ -34,151 +34,20 @@
     "motionStyle": "snappy",
     "cornerRadius": 20
   },
-  "hook": "Get \"Our stack in 20 seconds\" on screen within 0.5 s with a bold snappy entrance and keep it moving through 1.5 s.",
-  "scenes": [
-    {
-      "id": "s1",
-      "type": "title",
-      "goal": "Open with the main message",
-      "durationSec": 3.5,
-      "onScreenText": [
-        {
-          "role": "headline",
-          "text": "Our stack in 20 seconds",
-          "maxChars": 48
-        }
-      ],
-      "icons": [],
-      "images": [],
-      "transitionIn": "cut"
-    },
-    {
-      "id": "frontend",
-      "type": "icon-grid",
-      "goal": "Show a set of tools or features",
-      "durationSec": 5,
-      "onScreenText": [
-        {
-          "role": "headline",
-          "text": "Frontend",
-          "maxChars": 48
-        },
-        {
-          "role": "label",
-          "text": "React",
-          "maxChars": 32
-        },
-        {
-          "role": "label",
-          "text": "TypeScript",
-          "maxChars": 32
-        },
-        {
-          "role": "label",
-          "text": "Vite",
-          "maxChars": 32
-        }
-      ],
-      "icons": [
-        "react",
-        "typescript",
-        "vite"
-      ],
-      "images": [],
-      "transitionIn": "slide-up"
-    },
-    {
-      "id": "backend",
-      "type": "icon-grid",
-      "goal": "Show a set of tools or features",
-      "durationSec": 5,
-      "onScreenText": [
-        {
-          "role": "headline",
-          "text": "Backend",
-          "maxChars": 48
-        },
-        {
-          "role": "label",
-          "text": "Node.js",
-          "maxChars": 32
-        },
-        {
-          "role": "label",
-          "text": "PostgreSQL",
-          "maxChars": 32
-        },
-        {
-          "role": "label",
-          "text": "Docker",
-          "maxChars": 32
-        }
-      ],
-      "icons": [
-        "nodejs",
-        "postgresql",
-        "docker"
-      ],
-      "images": [],
-      "transitionIn": "slide-up"
-    },
-    {
-      "id": "ship",
-      "type": "icon-grid",
-      "goal": "Show a set of tools or features",
-      "durationSec": 5,
-      "onScreenText": [
-        {
-          "role": "headline",
-          "text": "Ship it",
-          "maxChars": 48
-        },
-        {
-          "role": "label",
-          "text": "GitHub Actions",
-          "maxChars": 32
-        },
-        {
-          "role": "label",
-          "text": "Cloudflare",
-          "maxChars": 32
-        }
-      ],
-      "icons": [
-        "github-actions",
-        "cloudflare"
-      ],
-      "images": [],
-      "transitionIn": "slide-up"
-    },
-    {
-      "id": "s2",
-      "type": "cta",
-      "goal": "Tell viewers what to do next",
-      "durationSec": 3.5,
-      "onScreenText": [
-        {
-          "role": "headline",
-          "text": "Want the template?",
-          "maxChars": 48
-        },
-        {
-          "role": "cta",
-          "text": "Comment STACK",
-          "maxChars": 32
-        }
-      ],
-      "icons": [],
-      "images": [],
-      "transitionIn": "slide-up"
-    }
+  "sceneMode": "auto",
+  "scenes": [],
+  "notes": [
+    "Use the Vercel icon at the top of the entire video",
+    "Add a keep-in-touch card with my name, Alex Dev, at the end"
   ],
+  "icons": {
+    "enabled": true
+  },
   "voiceover": {
     "enabled": false,
-    "voice": "default",
     "language": "en-US",
-    "wordsPerMinute": 150,
-    "pronunciations": {}
+    "voice": "",
+    "wordsPerMinute": 150
   },
   "captions": {
     "enabled": false,
@@ -187,7 +56,7 @@
   },
   "music": {
     "enabled": false,
-    "note": ""
+    "genre": ""
   },
   "rules": {
     "minContrast": 4.5,
@@ -197,14 +66,15 @@
   },
   "estimate": {
     "tier": "medium",
-    "scenes": 5,
-    "durationSec": 22,
+    "scenes": 6,
+    "durationSec": 38,
     "complexityNotes": [
-      "5 scenes over 22 s",
-      "3 icon grid scenes",
-      "8 icons to place"
+      "About 6 scenes, planned by Claude",
+      "Length chosen by Claude (estimated at 38 s)",
+      "2 notes to follow",
+      "Tech and brand icons"
     ],
     "voCharacters": 0
   },
-  "hash": "81761274c9c2bc4513a2d13add66f38da8b0b83131b383933559432f0f26c5fa"
+  "hash": "37f5857ed8c7383fb50ae4fccce8c8637fe3c11574f5898e4287e52220c48135"
 }

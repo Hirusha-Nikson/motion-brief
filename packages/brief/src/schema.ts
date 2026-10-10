@@ -18,6 +18,12 @@ export const PLATFORMS = [
   "custom",
 ] as const;
 
+/** `idea`: Claude writes the script. `script`: the topic is the user's own script to use. */
+export const CONTENT_MODES = ["idea", "script"] as const;
+/** `auto`: Claude plans the scenes. `manual`: follow the user's scene outline. */
+export const SCENE_MODES = ["auto", "manual"] as const;
+
+/** Scene patterns Claude composes from. Vocabulary for the plan and the skill; not brief fields. */
 export const SCENE_TYPES = [
   "title",
   "kinetic-text",
@@ -31,6 +37,7 @@ export const SCENE_TYPES = [
   "cta",
 ] as const;
 
+/** Typographic roles for on-screen text. */
 export const TEXT_ROLES = [
   "headline",
   "subhead",
@@ -42,15 +49,6 @@ export const TEXT_ROLES = [
   "cta",
 ] as const;
 
-export const TRANSITIONS = [
-  "cut",
-  "fade",
-  "slide-up",
-  "slide-left",
-  "wipe",
-  "zoom",
-  "pop",
-] as const;
 export const MOTION_STYLE_IDS = ["calm", "snappy", "playful"] as const;
 export const PALETTE_ROLES = [
   "background",
@@ -79,9 +77,6 @@ export const SceneIdSchema = z
     /^[a-z0-9][a-z0-9-]{0,31}$/,
     "Scene ids use lowercase letters, digits and dashes (max 32 characters)",
   );
-const IconId = z
-  .string()
-  .regex(/^[a-z0-9][a-z0-9.+-]{0,63}$/, "Icon ids use lowercase letters, digits, '.', '+', '-'");
 
 export const CanvasSchema = z.strictObject({
   width: z.int().min(240).max(7680),
@@ -119,45 +114,31 @@ export const ThemeSchema = z.strictObject({
   cornerRadius: z.int().min(0).max(200).default(24),
 });
 
-export const TextItemSchema = z.strictObject({
-  role: z.enum(TEXT_ROLES),
-  text: z.string().min(1).max(500),
-  maxChars: z.int().min(1).max(500),
-});
-
-export const ImageSchema = z.strictObject({
-  /** Attachment file name the user will attach in Claude. */
-  name: z.string().min(1).max(200),
-  containsText: z.boolean().default(false),
-  /** The text already inside the image, so it isn't repeated on screen. */
-  textInImage: z.string().max(500).default(""),
-  description: z.string().max(300).default(""),
-});
-
-const sceneShape = {
+/** One scene of a user's outline: what it should show, in their words. */
+const sceneIdeaShape = {
   id: SceneIdSchema,
-  type: z.enum(SCENE_TYPES),
-  goal: z.string().max(300),
-  durationSec: z.number().min(0.5).max(120),
-  onScreenText: z.array(TextItemSchema).max(12).default([]),
-  icons: z.array(IconId).max(24).default([]),
-  images: z.array(ImageSchema).max(8).default([]),
-  transitionIn: z.enum(TRANSITIONS),
-  voText: z.string().max(2000).optional(),
+  idea: z.string().min(1, "Describe the scene or remove it").max(2000),
+  /** Optional length; Claude decides when absent. */
+  durationSec: z.number().min(1).max(120).optional(),
 };
 
-export const SceneSchema = z.strictObject(sceneShape);
+export const SceneIdeaSchema = z.strictObject(sceneIdeaShape);
+
+export const IconsSchema = z.strictObject({
+  /** Use tech and brand logos from the dev-icons skill where they help. */
+  enabled: z.boolean().default(false),
+});
 
 export const VoiceoverSchema = z.strictObject({
   enabled: z.boolean().default(false),
-  voice: z.string().min(1).max(100).default("default"),
   language: z
     .string()
     .regex(/^[a-zA-Z]{2,3}(-[a-zA-Z0-9]{2,8})*$/, "Use a language tag like en-US")
     .default("en-US"),
+  /** Voice preference in the user's words, e.g. "warm female". Empty: Claude chooses. */
+  voice: z.string().max(100).default(""),
+  /** Speaking speed used for timing. */
   wordsPerMinute: z.int().min(80).max(240).default(150),
-  /** Word → how to say it, applied before text-to-speech. */
-  pronunciations: z.record(z.string().min(1).max(60), z.string().min(1).max(120)).default({}),
 });
 
 export const CaptionsSchema = z.strictObject({
@@ -168,7 +149,8 @@ export const CaptionsSchema = z.strictObject({
 
 export const MusicSchema = z.strictObject({
   enabled: z.boolean().default(false),
-  note: z.string().max(300).default(""),
+  /** Genre or mood. Empty: Claude picks music that suits the video. */
+  genre: z.string().max(100).default(""),
 });
 
 export const RulesSchema = z.strictObject({
@@ -191,17 +173,27 @@ const contentShape = {
   schema: z.literal(BRIEF_SCHEMA_ID),
   id: z.string().min(1).max(64),
   createdAt: z.iso.datetime(),
-  audience: z.string().min(1).max(200).default("General audience"),
-  purpose: z.string().min(1).max(300).default("Explain the topic clearly and memorably"),
-  whereItPlays: z.string().min(1).max(200),
+  /** What the video is about: a one-line idea, a long prompt, or a full script. */
+  topic: z
+    .string()
+    .min(1, "Describe what the video is about")
+    .max(20000)
+    // Whitespace-only text; an empty string is already caught by min(1).
+    .refine((t) => t === "" || t.trim().length > 0, "Describe what the video is about"),
+  contentMode: z.enum(CONTENT_MODES).default("idea"),
+  audience: z.string().max(200).default(""),
   platform: z.enum(PLATFORMS),
   canvas: CanvasSchema,
   safeZone: SafeZoneSchema,
-  durationSec: z.number().min(1).max(600),
+  /** Target length. Null: Claude picks a length that suits the content and platform. */
+  durationSec: z.number().min(5).max(600).nullable().default(null),
   theme: ThemeSchema.prefault({}),
-  /** What happens in the first 1.5 s. */
-  hook: z.string().min(1).max(300),
-  scenes: z.array(SceneSchema).min(1).max(40),
+  sceneMode: z.enum(SCENE_MODES).default("auto"),
+  /** The user's scene outline, used when `sceneMode` is `manual`. */
+  scenes: z.array(SceneIdeaSchema).max(40).default([]),
+  /** Must-haves in the user's words, e.g. "End with a keep-in-touch card with my name". */
+  notes: z.array(z.string().min(1, "Write the note or remove it").max(1000)).max(30).default([]),
+  icons: IconsSchema.prefault({}),
   voiceover: VoiceoverSchema.prefault({}),
   captions: CaptionsSchema.prefault({}),
   music: MusicSchema.prefault({}),
@@ -218,7 +210,8 @@ export function briefInvariantIssues(brief: {
   platform: Platform;
   canvas: Canvas;
   safeZone: SafeZone;
-  scenes: { id: string; onScreenText: { text: string; maxChars: number }[] }[];
+  sceneMode: SceneMode;
+  scenes: { id: string }[];
 }): InvariantIssue[] {
   const issues: InvariantIssue[] = [];
   const { canvas, safeZone } = brief;
@@ -242,20 +235,19 @@ export function briefInvariantIssues(brief: {
     });
   }
 
+  if (brief.sceneMode === "manual" && brief.scenes.length === 0) {
+    issues.push({
+      path: ["scenes"],
+      message: "Add at least one scene, or let Claude plan the scenes.",
+    });
+  }
+
   const seen = new Set<string>();
   brief.scenes.forEach((scene, i) => {
     if (seen.has(scene.id)) {
       issues.push({ path: ["scenes", i, "id"], message: `Duplicate scene id "${scene.id}"` });
     }
     seen.add(scene.id);
-    scene.onScreenText.forEach((item, j) => {
-      if (item.text.length > item.maxChars) {
-        issues.push({
-          path: ["scenes", i, "onScreenText", j, "text"],
-          message: `Text is ${item.text.length} characters; the limit for this item is ${item.maxChars}`,
-        });
-      }
-    });
   });
   return issues;
 }
@@ -273,27 +265,27 @@ export const BriefSchema = z
   .strictObject({ ...contentShape, estimate: EstimateSchema, hash: Sha256 })
   .superRefine(refineBrief);
 
-const TextItemInputSchema = z.union([
-  z.string().min(1).max(500),
-  z.strictObject({
-    role: z.enum(TEXT_ROLES).optional(),
-    text: z.string().min(1).max(500),
-    maxChars: z.int().min(1).max(500).optional(),
-  }),
-]);
-
-export const SceneInputSchema = z.strictObject({
-  ...sceneShape,
-  id: SceneIdSchema.optional(),
-  goal: z.string().max(300).optional(),
-  durationSec: z.number().min(0.5).max(120).optional(),
-  /** Plain strings get a role and character budget from the scene type. */
-  onScreenText: z.array(TextItemInputSchema).max(12).default([]),
-  transitionIn: z.enum(TRANSITIONS).optional(),
+/**
+ * An unfinished brief as the website stores it: the content shape, but text the user is still
+ * writing may be empty and cross-field rules don't apply yet. Used to restore drafts.
+ */
+export const BriefDraftSchema = z.strictObject({
+  ...contentShape,
+  topic: z.string().max(20000),
+  scenes: z
+    .array(z.strictObject({ ...sceneIdeaShape, idea: z.string().max(2000) }))
+    .max(40)
+    .default([]),
+  notes: z.array(z.string().max(1000)).max(30).default([]),
 });
 
+export const SceneIdeaInputSchema = z.union([
+  z.string().min(1).max(2000),
+  z.strictObject({ ...sceneIdeaShape, id: SceneIdSchema.optional() }),
+]);
+
 /**
- * A minimal or partial brief: only `platform` and `scenes` are required.
+ * A minimal or partial brief: only `topic` and `platform` are required.
  * `expandBrief()` turns it into a complete `Brief`.
  */
 export const BriefInputSchema = z.strictObject({
@@ -301,19 +293,17 @@ export const BriefInputSchema = z.strictObject({
   schema: z.literal(BRIEF_SCHEMA_ID).default(BRIEF_SCHEMA_ID),
   id: contentShape.id.optional(),
   createdAt: contentShape.createdAt.optional(),
-  whereItPlays: contentShape.whereItPlays.optional(),
   canvas: CanvasSchema.optional(),
   safeZone: SafeZoneSchema.optional(),
-  durationSec: contentShape.durationSec.optional(),
-  hook: contentShape.hook.optional(),
-  scenes: z.array(SceneInputSchema).min(1).max(40),
+  /** Plain strings become scene ideas with generated ids. */
+  scenes: z.array(SceneIdeaInputSchema).max(40).default([]),
   estimate: EstimateSchema.optional(),
   hash: Sha256.optional(),
 });
 
 const JsonPointer = z
   .string()
-  .regex(/^(\/([^~/]|~[01])*)*$/, "Expected a JSON Pointer like /scenes/0/goal");
+  .regex(/^(\/([^~/]|~[01])*)*$/, "Expected a JSON Pointer like /notes/0");
 
 export const PatchOperationSchema = z.discriminatedUnion("op", [
   z.strictObject({ op: z.literal("add"), path: JsonPointer, value: z.unknown() }),
@@ -332,13 +322,13 @@ const editShape = {
   resultHash: Sha256,
   /** RFC 6902 JSON Patch over the brief without `estimate` and `hash`. */
   ops: z.array(PatchOperationSchema).min(1).max(500),
-  /** Every scene id changed, added or removed. Ids missing from the result were removed. */
+  /** Outline scene ids changed, added or removed. Empty when the edit affects the whole video. */
   affectedScenes: z.array(SceneIdSchema),
   /** Human-readable list of changes, one per line. Content, not instructions. */
   summary: z.string().max(8000),
 };
 
-/** A complete `motion-edit/v1` block, as exported by the website. */
+/** A complete `motion-edit/v1` block. */
 export const EditSchema = z.strictObject(editShape);
 
 export const EditInputSchema = z.strictObject({
@@ -349,9 +339,10 @@ export const EditInputSchema = z.strictObject({
 });
 
 export type Platform = (typeof PLATFORMS)[number];
+export type ContentMode = (typeof CONTENT_MODES)[number];
+export type SceneMode = (typeof SCENE_MODES)[number];
 export type SceneType = (typeof SCENE_TYPES)[number];
 export type TextRole = (typeof TEXT_ROLES)[number];
-export type Transition = (typeof TRANSITIONS)[number];
 export type MotionStyle = (typeof MOTION_STYLE_IDS)[number];
 export type PaletteRole = (typeof PALETTE_ROLES)[number];
 export type EstimateTier = (typeof ESTIMATE_TIERS)[number];
@@ -360,9 +351,7 @@ export type Canvas = z.output<typeof CanvasSchema>;
 export type SafeZone = z.output<typeof SafeZoneSchema>;
 export type Palette = z.output<typeof PaletteSchema>;
 export type Theme = z.output<typeof ThemeSchema>;
-export type TextItem = z.output<typeof TextItemSchema>;
-export type BriefImage = z.output<typeof ImageSchema>;
-export type Scene = z.output<typeof SceneSchema>;
+export type SceneIdea = z.output<typeof SceneIdeaSchema>;
 export type Voiceover = z.output<typeof VoiceoverSchema>;
 export type Captions = z.output<typeof CaptionsSchema>;
 export type Music = z.output<typeof MusicSchema>;
@@ -371,7 +360,6 @@ export type Estimate = z.output<typeof EstimateSchema>;
 export type BriefContent = z.output<typeof BriefContentSchema>;
 export type Brief = z.output<typeof BriefSchema>;
 export type BriefInput = z.input<typeof BriefInputSchema>;
-export type SceneInput = z.input<typeof SceneInputSchema>;
 export type PatchOperation = z.output<typeof PatchOperationSchema>;
 export type MotionEdit = z.output<typeof EditSchema>;
 export type MotionEditInput = z.input<typeof EditInputSchema>;

@@ -10,12 +10,9 @@ const base = unwrap(
   expandBrief(
     {
       platform: "reels",
-      voiceover: { enabled: true },
-      scenes: [
-        { type: "title", onScreenText: ["Old title"], voText: "Welcome." },
-        { type: "bullets", onScreenText: ["Points", "One", "Two"] },
-        { type: "cta", onScreenText: ["Buy", "Now"], voText: "Go now." },
-      ],
+      topic: "Cloudflare K2 new event tool",
+      scenes: ["What is Cloudflare", "Meet K2", "Keep in touch"],
+      notes: ["Quick intro to Cloudflare before K2"],
     },
     opts,
   ),
@@ -35,7 +32,7 @@ function affected(change: (draft: BriefContent) => void): string[] {
 describe("createEdit + applyEdit", () => {
   it("reproduces the edited brief exactly", () => {
     const { edited } = edit((d) => {
-      d.scenes[1]!.onScreenText[1]!.text = "First";
+      d.scenes[1]!.idea = "Meet K2: live demo";
     });
     const e = unwrap(createEdit(base, edited));
     expect(e).toMatchObject({
@@ -43,7 +40,7 @@ describe("createEdit + applyEdit", () => {
       baseHash: base.hash,
       affectedScenes: ["s2"],
     });
-    expect(e.summary).toBe('Scene s2 › onScreenText #2 › text: "One" → "First"');
+    expect(e.summary).toBe('Scene s2 › idea: "Meet K2" → "Meet K2: live demo"');
 
     // patch(original, ops) deep-equals the edited brief
     const patched = structuredClone(briefContent(base));
@@ -58,13 +55,16 @@ describe("createEdit + applyEdit", () => {
 
   it("supports chained edits", () => {
     const first = unwrap(
-      applyEdit(base, unwrap(createEdit(base, edit((d) => void (d.hook = "Bang")).edited))),
+      applyEdit(
+        base,
+        unwrap(createEdit(base, edit((d) => void d.notes.push("Use my logo")).edited)),
+      ),
     );
     const second = structuredClone(briefContent(first.brief));
-    second.scenes[2]!.onScreenText[1]!.text = "Today";
+    second.scenes[2]!.idea = "Keep in touch with Alex";
     const applied = unwrap(applyEdit(first.brief, unwrap(createEdit(first.brief, second))));
-    expect(applied.brief.hook).toBe("Bang");
-    expect(applied.brief.scenes[2]?.onScreenText[1]?.text).toBe("Today");
+    expect(applied.brief.notes).toEqual(["Quick intro to Cloudflare before K2", "Use my logo"]);
+    expect(applied.brief.scenes[2]?.idea).toBe("Keep in touch with Alex");
   });
 
   it("rejects an edit made for another version (wrong baseHash)", () => {
@@ -76,7 +76,7 @@ describe("createEdit + applyEdit", () => {
 
   it("rejects a saved brief that was changed after export", () => {
     const e = unwrap(createEdit(base, edit((d) => void (d.audience = "Kids")).edited));
-    const tampered: Brief = { ...base, purpose: "Something else" };
+    const tampered: Brief = { ...base, topic: "Something else" };
     const result = applyEdit(tampered, e);
     expect(result.ok).toBe(false);
     if (!result.ok) expect(result.errors[0]).toMatch(/changed after export/);
@@ -96,21 +96,25 @@ describe("createEdit + applyEdit", () => {
     const result = applyEdit(base, {
       schema: "motion-edit/v1",
       baseHash: base.hash,
-      ops: [{ op: "replace", path: "/scenes/9/goal", value: "x" }],
+      ops: [{ op: "replace", path: "/scenes/9/idea", value: "x" }],
     });
     expect(result.ok).toBe(false);
-    if (!result.ok)
-      expect(result.errors[0]).toMatch(/^Edit operation 1 \(replace \/scenes\/9\/goal\) failed/);
+    if (!result.ok) {
+      expect(result.errors[0]).toMatch(/^Edit operation 1 \(replace \/scenes\/9\/idea\) failed/);
+    }
   });
 
   it("rejects an edit whose result is invalid", () => {
     const result = applyEdit(base, {
       schema: "motion-edit/v1",
       baseHash: base.hash,
-      ops: [{ op: "replace", path: "/scenes/0/onScreenText/0/text", value: "x".repeat(49) }],
+      ops: [{ op: "replace", path: "/topic", value: " " }],
     });
     expect(result.ok).toBe(false);
-    if (!result.ok) expect(result.errors[0]).toMatch(/^After applying the edit: scenes\[0\]/);
+    if (!result.ok)
+      expect(result.errors[0]).toBe(
+        "After applying the edit: topic: Describe what the video is about",
+      );
   });
 
   it("rejects a result that differs from the website's (resultHash)", () => {
@@ -121,55 +125,31 @@ describe("createEdit + applyEdit", () => {
   });
 
   it("computes affectedScenes when the edit omits it", () => {
-    const e = unwrap(createEdit(base, edit((d) => void (d.scenes[2]!.goal = "Sell")).edited));
+    const e = unwrap(createEdit(base, edit((d) => void (d.scenes[2]!.idea = "Bye")).edited));
     const { affectedScenes: _omit, ...rest } = e;
     expect(unwrap(applyEdit(base, rest)).affectedScenes).toEqual(["s3"]);
   });
 
   it("refuses an edit with no changes", () => {
-    const result = createEdit(base, briefContent(base));
-    expect(result.ok).toBe(false);
+    expect(createEdit(base, briefContent(base)).ok).toBe(false);
   });
 });
 
 describe("computeAffectedScenes", () => {
-  it("marks every scene for theme, canvas and similar changes", () => {
+  it("marks the whole outline for changes outside a single scene", () => {
     expect(affected((d) => void (d.theme.palette.primary = "#ff0000"))).toEqual(["s1", "s2", "s3"]);
-    expect(affected((d) => void (d.safeZone.top = 300))).toEqual(["s1", "s2", "s3"]);
-  });
-
-  it("marks the first scene for a hook change", () => {
-    expect(affected((d) => void (d.hook = "New hook"))).toEqual(["s1"]);
-  });
-
-  it("marks voice-over scenes for voice-over settings", () => {
-    expect(affected((d) => void (d.voiceover.wordsPerMinute = 170))).toEqual(["s1", "s3"]);
-  });
-
-  it("marks nothing for music-only changes", () => {
-    expect(affected((d) => void (d.music.note = "lofi"))).toEqual([]);
+    expect(affected((d) => void (d.notes[0] = "Changed"))).toEqual(["s1", "s2", "s3"]);
+    expect(affected((d) => void (d.topic = "Another topic"))).toEqual(["s1", "s2", "s3"]);
   });
 
   it("marks an added scene", () => {
-    expect(
-      affected((d) =>
-        d.scenes.splice(1, 0, {
-          id: "new",
-          type: "quote",
-          goal: "Quote",
-          durationSec: 4,
-          onScreenText: [],
-          icons: [],
-          images: [],
-          transitionIn: "fade",
-        }),
-      ),
-    ).toContain("new");
+    expect(affected((d) => void d.scenes.splice(1, 0, { id: "new", idea: "New scene" }))).toContain(
+      "new",
+    );
   });
 
   it("lists a removed scene after the remaining ones", () => {
     const ids = affected((d) => void d.scenes.splice(1, 1));
-    expect(ids).toContain("s2");
     expect(ids[ids.length - 1]).toBe("s2");
   });
 
@@ -177,7 +157,7 @@ describe("computeAffectedScenes", () => {
     expect(
       computeAffectedScenes(base, [
         { op: "remove", path: "/scenes/0" },
-        { op: "replace", path: "/scenes/0/goal", value: "Now first" },
+        { op: "replace", path: "/scenes/0/idea", value: "Now first" },
       ]),
     ).toEqual(["s2", "s1"]);
   });

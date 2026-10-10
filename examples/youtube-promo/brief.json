@@ -2,9 +2,9 @@
   "schema": "motion-brief/v1",
   "id": "example-youtube-promo",
   "createdAt": "2026-10-10T00:00:00.000Z",
+  "topic": "Ledgerly, a fictional invoicing app for small businesses: it imports your spreadsheet, sends payment reminders automatically and accepts card and bank payments, so invoices get paid faster.",
+  "contentMode": "idea",
   "audience": "Small-business owners who track invoices in spreadsheets",
-  "purpose": "Show how Ledgerly (a fictional product) gets invoices paid faster",
-  "whereItPlays": "YouTube, landscape, watched with sound on desktop and TV",
   "platform": "youtube",
   "canvas": {
     "width": 1920,
@@ -17,7 +17,7 @@
     "bottom": 108,
     "left": 192
   },
-  "durationSec": 28,
+  "durationSec": 45,
   "theme": {
     "palette": {
       "background": "#0f172a",
@@ -34,161 +34,21 @@
     "motionStyle": "snappy",
     "cornerRadius": 24
   },
-  "hook": "\"Get paid 2× faster\" slams in word by word in the first second over a sweeping highlight bar.",
-  "scenes": [
-    {
-      "id": "s1",
-      "type": "title",
-      "goal": "Open with the main message",
-      "durationSec": 4,
-      "onScreenText": [
-        {
-          "role": "headline",
-          "text": "Get paid 2× faster",
-          "maxChars": 48
-        },
-        {
-          "role": "subhead",
-          "text": "Ledgerly turns invoices into cash",
-          "maxChars": 80
-        }
-      ],
-      "icons": [],
-      "images": [],
-      "transitionIn": "cut"
-    },
-    {
-      "id": "s2",
-      "type": "kinetic-text",
-      "goal": "Deliver one idea with animated typography",
-      "durationSec": 4,
-      "onScreenText": [
-        {
-          "role": "headline",
-          "text": "Still chasing invoices?",
-          "maxChars": 48
-        },
-        {
-          "role": "body",
-          "text": "Spreadsheets don't send reminders.",
-          "maxChars": 120
-        }
-      ],
-      "icons": [],
-      "images": [],
-      "transitionIn": "slide-up"
-    },
-    {
-      "id": "s3",
-      "type": "bullets",
-      "goal": "List the key points one by one",
-      "durationSec": 7,
-      "onScreenText": [
-        {
-          "role": "headline",
-          "text": "How Ledgerly helps",
-          "maxChars": 48
-        },
-        {
-          "role": "body",
-          "text": "Import your spreadsheet in one click",
-          "maxChars": 120
-        },
-        {
-          "role": "body",
-          "text": "Automatic payment reminders",
-          "maxChars": 120
-        },
-        {
-          "role": "body",
-          "text": "Card and bank payments built in",
-          "maxChars": 120
-        }
-      ],
-      "icons": [],
-      "images": [],
-      "transitionIn": "slide-up"
-    },
-    {
-      "id": "s4",
-      "type": "stat",
-      "goal": "Make one number land",
-      "durationSec": 4.5,
-      "onScreenText": [
-        {
-          "role": "stat",
-          "text": "9 days",
-          "maxChars": 12
-        },
-        {
-          "role": "label",
-          "text": "faster payments on average",
-          "maxChars": 32
-        },
-        {
-          "role": "body",
-          "text": "Sample data for illustration",
-          "maxChars": 120
-        }
-      ],
-      "icons": [],
-      "images": [],
-      "transitionIn": "slide-up"
-    },
-    {
-      "id": "s5",
-      "type": "comparison",
-      "goal": "Contrast two options",
-      "durationSec": 5,
-      "onScreenText": [
-        {
-          "role": "headline",
-          "text": "Before vs after",
-          "maxChars": 48
-        },
-        {
-          "role": "label",
-          "text": "Spreadsheet: 32 days",
-          "maxChars": 32
-        },
-        {
-          "role": "label",
-          "text": "Ledgerly: 23 days",
-          "maxChars": 32
-        }
-      ],
-      "icons": [],
-      "images": [],
-      "transitionIn": "slide-up"
-    },
-    {
-      "id": "s6",
-      "type": "cta",
-      "goal": "Tell viewers what to do next",
-      "durationSec": 3.5,
-      "onScreenText": [
-        {
-          "role": "headline",
-          "text": "Start free today",
-          "maxChars": 48
-        },
-        {
-          "role": "cta",
-          "text": "ledgerly.example",
-          "maxChars": 32
-        }
-      ],
-      "icons": [],
-      "images": [],
-      "transitionIn": "slide-up"
-    }
+  "sceneMode": "auto",
+  "scenes": [],
+  "notes": [
+    "Open with the pain of chasing late invoices",
+    "Mark any numbers as sample data",
+    "End with: Start free at ledgerly.example"
   ],
+  "icons": {
+    "enabled": false
+  },
   "voiceover": {
     "enabled": false,
-    "voice": "default",
     "language": "en-US",
-    "wordsPerMinute": 150,
-    "pronunciations": {}
+    "voice": "",
+    "wordsPerMinute": 150
   },
   "captions": {
     "enabled": false,
@@ -196,8 +56,8 @@
     "maxLines": 2
   },
   "music": {
-    "enabled": false,
-    "note": ""
+    "enabled": true,
+    "genre": "upbeat electronic"
   },
   "rules": {
     "minContrast": 4.5,
@@ -207,14 +67,15 @@
   },
   "estimate": {
     "tier": "medium",
-    "scenes": 6,
-    "durationSec": 28,
+    "scenes": 8,
+    "durationSec": 45,
     "complexityNotes": [
-      "6 scenes over 28 s",
-      "1 kinetic text scene",
-      "1 comparison scene"
+      "About 8 scenes, planned by Claude",
+      "45 s long",
+      "3 notes to follow",
+      "Background music"
     ],
     "voCharacters": 0
   },
-  "hash": "046104f3f88f24a8630af8a1800eed77302ab7aaea322d1aa92f434811cab340"
+  "hash": "f6e8720f69d50ac0d32d7f4e37051df5c82f2e4deec25d350c1457c7e86343f1"
 }

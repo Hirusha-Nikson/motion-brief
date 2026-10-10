@@ -1,11 +1,12 @@
 {
-  "description": "LinkedIn square stat post, calm style, no audio. Edit: change the primary colour, which affects every scene.",
+  "description": "LinkedIn square stat post with the user's own scene outline. Edit: rewrite one scene (s2 only).",
   "brief": {
     "id": "example-linkedin-stat-post",
     "createdAt": "2026-10-10T00:00:00.000Z",
     "platform": "linkedin-1x1",
+    "topic": "Flexible working hours and staff retention, from a sample survey of 2,000 employees",
     "audience": "HR and people leaders",
-    "purpose": "Make the case for flexible hours with one memorable number",
+    "durationSec": 15,
     "theme": {
       "palette": {
         "background": "#ffffff",
@@ -20,23 +21,23 @@
       "cornerRadius": 16
     },
     "scenes": [
+      { "idea": "Big number: 73% of employees want flexible hours", "durationSec": 5 },
       {
-        "type": "stat",
-        "onScreenText": ["73%", "want flexible hours", "Sample survey of 2,000 employees"]
+        "idea": "Bar chart: flexible teams 12% turnover vs fixed hours 21% turnover",
+        "durationSec": 6
       },
-      {
-        "type": "chart",
-        "onScreenText": [
-          "Flexibility vs retention",
-          "Flexible teams: 12% turnover",
-          "Fixed hours: 21% turnover"
-        ]
-      },
-      { "type": "cta", "onScreenText": ["Read the full report", "Link in comments"] }
-    ]
+      { "idea": "Call to action: read the full report, link in comments", "durationSec": 4 }
+    ],
+    "notes": ["Label the figures as sample data"]
   },
   "edit": {
-    "description": "Darken the primary colour. A theme change affects every scene.",
-    "ops": [{ "op": "replace", "path": "/theme/palette/primary", "value": "#1e40af" }]
+    "description": "Rewrite the chart scene (scene s2 only).",
+    "ops": [
+      {
+        "op": "replace",
+        "path": "/scenes/1/idea",
+        "value": "Two bars side by side: 12% turnover with flexible hours vs 21% with fixed hours; highlight the gap"
+      }
+    ]
   }
 }

@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import { applyPatch } from "rfc6902";
 import { describe, expect, it } from "vitest";
 import { parseBriefBlock, parseEditBlock } from "./blocks.js";
+import { checkBrief } from "./checks.js";
 import { briefContent } from "./defaults.js";
 import type { ExampleSource } from "./examples.js";
 import { EXAMPLES_DIR, generatedFiles } from "./generate.js";
@@ -35,11 +36,12 @@ addFormats(ajv);
 const validateBrief = ajv.compile(briefJsonSchema());
 const validateEdit = ajv.compile(editJsonSchema());
 
+// Claude plans the scenes in three examples, so their edits affect the whole video (no outline ids).
 const expectedAffected: Record<string, string[]> = {
-  "youtube-promo": ["s6"],
-  "reels-explainer-vo": ["s3"],
-  "linkedin-stat-post": ["s1", "s2", "s3"],
-  "tech-stack-icons": ["frontend"],
+  "youtube-promo": [],
+  "reels-explainer-vo": [],
+  "linkedin-stat-post": ["s2"],
+  "tech-stack-icons": [],
 };
 
 describe("generated files", () => {
@@ -62,6 +64,10 @@ describe.each(names)("example %s", (name) => {
   it("validates against the generated JSON Schema", () => {
     expect(validateBrief(brief), JSON.stringify(validateBrief.errors)).toBe(true);
     expect(validateEdit(edit), JSON.stringify(validateEdit.errors)).toBe(true);
+  });
+
+  it("passes every brief check without errors", () => {
+    expect(checkBrief(briefContent(brief)).filter((i) => i.severity === "error")).toEqual([]);
   });
 
   it("parses from its prompt files without warnings", () => {

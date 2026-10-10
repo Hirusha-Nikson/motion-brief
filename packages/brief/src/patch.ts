@@ -11,19 +11,6 @@ import {
   type PatchOperation,
 } from "./schema.js";
 
-/** Changing any of these affects how every scene looks or reads. */
-export const ALL_SCENE_PATHS = [
-  "/platform",
-  "/canvas",
-  "/safeZone",
-  "/theme",
-  "/rules",
-  "/captions",
-  "/audience",
-  "/purpose",
-  "/whereItPlays",
-] as const;
-
 /** Edits may not touch identity or derived fields. */
 export const PROTECTED_PATHS = ["/schema", "/id", "/createdAt", "/estimate", "/hash"] as const;
 
@@ -53,8 +40,9 @@ function sceneIds(doc: BriefContent): string[] {
 const SCENE_PATH = /^\/scenes\/(\d+|-)(\/.*)?$/;
 
 /**
- * Scene ids an edit changes, adds or removes, in the edited brief's order with removed ids last.
- * Changes to theme, canvas and similar make every scene affected.
+ * Outline scene ids an edit changes, adds or removes, in the edited brief's order with removed
+ * ids last. Any change outside a single outline scene (topic, notes, theme, ...) affects the
+ * whole video, so every outline scene is listed.
  */
 export function computeAffectedScenes(base: Brief | BriefContent, ops: readonly Operation[]) {
   const doc = clone(briefContent(base));
@@ -69,13 +57,11 @@ export function computeAffectedScenes(base: Brief | BriefContent, ops: readonly 
     const marks: Array<() => void> = [];
 
     for (const [k, path] of paths.entries()) {
-      if (path === "/scenes" || ALL_SCENE_PATHS.some((p) => under(path, p))) all = true;
-      if (under(path, "/hook") && before[0]) touched.add(before[0]);
-      if (under(path, "/voiceover")) {
-        for (const s of doc.scenes) if (s.voText) touched.add(s.id);
-      }
       const m = SCENE_PATH.exec(path);
-      if (!m) continue;
+      if (!m) {
+        all = true;
+        continue;
+      }
       const isTarget = k === paths.length - 1;
       const exact = m[2] === undefined;
       const insertion =
@@ -109,10 +95,8 @@ function short(v: unknown): string {
   if (typeof v === "string") return JSON.stringify(v.length > 60 ? `${v.slice(0, 57)}...` : v);
   if (Array.isArray(v)) return `[${v.length} item${v.length === 1 ? "" : "s"}]`;
   if (v && typeof v === "object") {
-    const { role, text, name } = v as Record<string, unknown>;
-    if (typeof text === "string")
-      return `${typeof role === "string" ? `${role} ` : ""}${short(text)}`;
-    if (typeof name === "string") return short(name);
+    const { idea } = v as Record<string, unknown>;
+    if (typeof idea === "string") return short(idea);
     return "{...}";
   }
   return JSON.stringify(v);
@@ -148,10 +132,10 @@ export function describeChanges(base: Brief | BriefContent, ops: readonly Operat
     const isScene = /^\/scenes\/(\d+|-)$/.test(op.path);
     switch (op.op) {
       case "add": {
-        const v = op.value as { id?: string; type?: string } | undefined;
+        const v = op.value as { id?: string; idea?: string } | undefined;
         lines.push(
           isScene
-            ? `Added scene ${v?.id ?? "?"} (${v?.type ?? "?"})`
+            ? `Added scene ${v?.id ?? "?"}: ${short(v?.idea ?? "")}`
             : `${label(op.path, doc)}: added ${short(op.value)}`,
         );
         break;

@@ -1,11 +1,11 @@
 {
-  "description": "Vertical tech-stack video with icon grids. Edit: add one icon to the frontend scene. Icon ids are provisional until the icon library is integrated (Phase 6).",
+  "description": "Vertical tech-stack video with icons from the dev-icons skill; Claude picks the length. Edit: add a note.",
   "brief": {
     "id": "example-tech-stack-icons",
     "createdAt": "2026-10-10T00:00:00.000Z",
     "platform": "shorts",
+    "topic": "Our web stack, layer by layer: React and TypeScript with Vite on the frontend, Node.js, PostgreSQL and Docker on the backend, shipped with GitHub Actions to Vercel.",
     "audience": "Developers choosing a web stack",
-    "purpose": "Show the team's stack, layer by layer",
     "theme": {
       "palette": {
         "background": "#09090b",
@@ -19,38 +19,16 @@
       "motionStyle": "snappy",
       "cornerRadius": 20
     },
-    "scenes": [
-      { "type": "title", "onScreenText": ["Our stack in 20 seconds"] },
-      {
-        "id": "frontend",
-        "type": "icon-grid",
-        "onScreenText": ["Frontend", "React", "TypeScript", "Vite"],
-        "icons": ["react", "typescript", "vite"]
-      },
-      {
-        "id": "backend",
-        "type": "icon-grid",
-        "onScreenText": ["Backend", "Node.js", "PostgreSQL", "Docker"],
-        "icons": ["nodejs", "postgresql", "docker"]
-      },
-      {
-        "id": "ship",
-        "type": "icon-grid",
-        "onScreenText": ["Ship it", "GitHub Actions", "Cloudflare"],
-        "icons": ["github-actions", "cloudflare"]
-      },
-      { "type": "cta", "onScreenText": ["Want the template?", "Comment STACK"] }
-    ]
+    "notes": [
+      "Use the Vercel icon at the top of the entire video",
+      "Add a keep-in-touch card with my name, Alex Dev, at the end"
+    ],
+    "icons": { "enabled": true }
   },
   "edit": {
-    "description": "Add Tailwind CSS to the frontend scene (scene frontend only).",
+    "description": "Add one more must-have note.",
     "ops": [
-      { "op": "add", "path": "/scenes/1/icons/-", "value": "tailwindcss" },
-      {
-        "op": "add",
-        "path": "/scenes/1/onScreenText/-",
-        "value": { "role": "label", "text": "Tailwind CSS", "maxChars": 32 }
-      }
+      { "op": "add", "path": "/notes/-", "value": "Mention that the template is free on GitHub" }
     ]
   }
 }

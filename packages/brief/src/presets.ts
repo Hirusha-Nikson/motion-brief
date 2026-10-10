@@ -109,6 +109,24 @@ export const PLATFORM_PRESETS: Record<PresetPlatform, PlatformPreset> = {
 
 export const CUSTOM_WHERE_IT_PLAYS = "Custom placement";
 
+export function whereItPlays(platform: Platform): string {
+  return platform === "custom" ? CUSTOM_WHERE_IT_PLAYS : PLATFORM_PRESETS[platform].whereItPlays;
+}
+
+/** Usual length range in seconds, used when the brief leaves the length to Claude. */
+export const TYPICAL_LENGTH_SEC: Record<Platform, readonly [min: number, max: number]> = {
+  reels: [15, 60],
+  tiktok: [15, 60],
+  shorts: [15, 60],
+  youtube: [60, 180],
+  "presentation-16x9": [30, 120],
+  "linkedin-16x9": [15, 60],
+  "linkedin-1x1": [15, 60],
+  "linkedin-4x5": [15, 60],
+  square: [15, 60],
+  custom: [15, 90],
+};
+
 function gcd(a: number, b: number): number {
   return b === 0 ? a : gcd(b, a % b);
 }
@@ -151,8 +169,10 @@ export function renderPlatformsMarkdown(): string {
     const action = p.actionSafe
       ? `${p.actionSafe.top} / ${p.actionSafe.right} / ${p.actionSafe.bottom} / ${p.actionSafe.left}`
       : "same";
-    return `| \`${id}\` | ${p.label} | ${p.canvas.width}×${p.canvas.height} (${aspectRatio(p.canvas)}) | ${p.canvas.fps} | ${s.top} / ${s.right} / ${s.bottom} / ${s.left} | ${action} | ${p.basis} |`;
+    const [min, max] = TYPICAL_LENGTH_SEC[id];
+    return `| \`${id}\` | ${p.label} | ${p.canvas.width}×${p.canvas.height} (${aspectRatio(p.canvas)}) | ${p.canvas.fps} | ${s.top} / ${s.right} / ${s.bottom} / ${s.left} | ${action} | ${min}–${max} s | ${p.basis} |`;
   });
+  const [cMin, cMax] = TYPICAL_LENGTH_SEC.custom;
   return [
     "# Platforms: canvas and safe zones",
     "",
@@ -162,10 +182,12 @@ export function renderPlatformsMarkdown(): string {
     "",
     "Safe zone values are margins in px from each edge: top / right / bottom / left. All content (text, icons, images, captions) stays inside the safe zone. Only background and decorative motion may extend to the action-safe area or the frame edge.",
     "",
-    "| Platform id | Name | Canvas | fps | Safe zone (px) | Action-safe (px) | Basis |",
-    "| --- | --- | --- | --- | --- | --- | --- |",
+    "Typical length applies when the brief leaves `durationSec` empty.",
+    "",
+    "| Platform id | Name | Canvas | fps | Safe zone (px) | Action-safe (px) | Typical length | Basis |",
+    "| --- | --- | --- | --- | --- | --- | --- | --- |",
     ...rows,
-    `| \`custom\` | Custom | from \`brief.canvas\` | from brief | 5% per side unless set | same | 5% per side |`,
+    `| \`custom\` | Custom | from \`brief.canvas\` | from brief | 5% per side unless set | same | ${cMin}–${cMax} s | 5% per side |`,
     "",
   ].join("\n");
 }

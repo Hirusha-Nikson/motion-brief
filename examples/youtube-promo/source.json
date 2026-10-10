@@ -1,11 +1,12 @@
 {
-  "description": "Product promo for YouTube (16:9), no voice-over. Edit: change the call to action.",
+  "description": "Product promo for YouTube (16:9). Claude plans the scenes. Edit: change a note.",
   "brief": {
     "id": "example-youtube-promo",
     "createdAt": "2026-10-10T00:00:00.000Z",
     "platform": "youtube",
+    "topic": "Ledgerly, a fictional invoicing app for small businesses: it imports your spreadsheet, sends payment reminders automatically and accepts card and bank payments, so invoices get paid faster.",
     "audience": "Small-business owners who track invoices in spreadsheets",
-    "purpose": "Show how Ledgerly (a fictional product) gets invoices paid faster",
+    "durationSec": 45,
     "theme": {
       "palette": {
         "background": "#0f172a",
@@ -18,49 +19,15 @@
       "fonts": { "heading": "Sora", "body": "Inter" },
       "motionStyle": "snappy"
     },
-    "hook": "\"Get paid 2× faster\" slams in word by word in the first second over a sweeping highlight bar.",
-    "scenes": [
-      {
-        "type": "title",
-        "onScreenText": ["Get paid 2× faster", "Ledgerly turns invoices into cash"]
-      },
-      {
-        "type": "kinetic-text",
-        "onScreenText": ["Still chasing invoices?", "Spreadsheets don't send reminders."]
-      },
-      {
-        "type": "bullets",
-        "onScreenText": [
-          "How Ledgerly helps",
-          "Import your spreadsheet in one click",
-          "Automatic payment reminders",
-          "Card and bank payments built in"
-        ]
-      },
-      {
-        "type": "stat",
-        "onScreenText": ["9 days", "faster payments on average", "Sample data for illustration"]
-      },
-      {
-        "type": "comparison",
-        "onScreenText": ["Before vs after", "Spreadsheet: 32 days", "Ledgerly: 23 days"]
-      },
-      { "type": "cta", "onScreenText": ["Start free today", "ledgerly.example"] }
-    ]
+    "notes": [
+      "Open with the pain of chasing late invoices",
+      "Mark any numbers as sample data",
+      "End with: Start free at ledgerly.example"
+    ],
+    "music": { "enabled": true, "genre": "upbeat electronic" }
   },
   "edit": {
-    "description": "Change the call to action to a free-trial offer (scene s6 only).",
-    "ops": [
-      {
-        "op": "replace",
-        "path": "/scenes/5/onScreenText/0/text",
-        "value": "Try it free for 30 days"
-      },
-      {
-        "op": "replace",
-        "path": "/scenes/5/onScreenText/1/text",
-        "value": "ledgerly.example/trial"
-      }
-    ]
+    "description": "Change the closing call to action (affects the whole video).",
+    "ops": [{ "op": "replace", "path": "/notes/2", "value": "End with: Try it free for 30 days" }]
   }
 }

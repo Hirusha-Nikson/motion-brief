@@ -13,5 +13,6 @@ export * from "./blocks.js";
 export * from "./patch.js";
 export * from "./prompt.js";
 export * from "./json-schema.js";
+export * from "./checks.js";
 export * from "./examples.js";
 export * from "./generate.js";
