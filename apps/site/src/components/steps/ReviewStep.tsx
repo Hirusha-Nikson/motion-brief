@@ -56,13 +56,18 @@ export function ReviewStep() {
               Customize → Plugins
             </a>
             , choose <strong>Add → Add marketplace</strong>, enter <code>{PLUGIN_MARKETPLACE}</code>
-            , then add <strong>MotionBrief</strong>.
+            , then open the <strong>Discover</strong> tab and add <strong>MotionBrief</strong>.
+          </li>
+          <li>
+            In Settings → Capabilities, turn on <strong>Code execution and file creation</strong>.
+            Claude renders the MP4 there.
           </li>
           <li>Copy or download the prompt and paste it into a new chat.</li>
           <li>Claude writes the script and scene plan and asks you to confirm or change it.</li>
           <li>
-            Claude builds the video in Claude Motion (Team and Enterprise plans) and checks it
-            before showing you. On other plans it builds an HTML animation instead.
+            Claude renders the video and checks it. You get an MP4 with voice-over, captions and
+            music, plus a separate SRT file. When Claude asks to reach a website (for the voice),
+            approve it.
           </li>
         </ol>
       </section>

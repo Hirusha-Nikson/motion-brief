@@ -33,8 +33,8 @@ export function AudioStep() {
     <section aria-labelledby="audio-title" className="step">
       <h2 id="audio-title">Audio</h2>
       <p className="lede">
-        Tick what you want. Claude writes the narration and times the scenes to it. If Claude Motion
-        can&apos;t add audio itself, Claude explains how to add it after export.
+        Tick what you want. Claude writes the narration, times the scenes to it, and renders an MP4
+        with a natural voice, captions (also as an SRT file) and music.
       </p>
 
       <fieldset className="group">

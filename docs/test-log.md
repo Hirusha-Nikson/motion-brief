@@ -4,7 +4,7 @@ Manual tests of the `motion-brief` skill in Claude, one row per example prompt. 
 
 ## How to test
 
-1. **Install the plugin:** in claude.ai, open **Customize → Plugins → Add → Add marketplace**, enter `Hirusha-Nikson/motion-brief`, and add **MotionBrief**. Alternatively, run `pnpm package` and upload `dist/motion-brief-plugin.zip` with **Add → Upload plugin**.
+1. **Install the plugin:** in claude.ai, open **Customize → Plugins → Add → Add marketplace**, enter `Hirusha-Nikson/motion-brief`, then add **MotionBrief** from the **Discover** tab. Alternatively, run `pnpm package` and upload `dist/motion-brief-plugin.zip` with **Add → Upload plugin**. Turn on **Settings → Capabilities → Code execution and file creation**.
 2. **Paste an example:** in a new chat, paste the whole `prompt.md` of one example from [`examples/`](../examples).
 3. **Check the plan, then the build:** check each column below, reply **go**, and check again after the build.
 4. **Try an edit:** paste the example's `edit-prompt.md`, or ask for a small change in chat, and confirm that only that part changed.
@@ -14,7 +14,7 @@ Manual tests of the `motion-brief` skill in Claude, one row per example prompt. 
 | --------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
 | Loads           | Claude says it's using the motion-brief skill and reports no schema errors                                                          |
 | Plan            | A script and scene plan in the `refs/script-plan.md` format, covering every note, ending with "Reply **go**" and no other questions |
-| Motion          | The video is a Claude Motion animation (or the fallback route is named in one line)                                                 |
+| Output          | An MP4 to download plus captions.srt; voice-over audible when on (the report names the voice engine)                                |
 | Canvas          | Exact size and aspect ratio from the brief                                                                                          |
 | Safe zone       | Nothing outside the safe zone at any moment                                                                                         |
 | Fit             | No overflow; text at or above the minimum size                                                                                      |
@@ -25,7 +25,7 @@ Manual tests of the `motion-brief` skill in Claude, one row per example prompt. 
 
 ## Results
 
-| Date | Example            | Plan / model | Loads | Plan | Motion | Canvas | Safe zone | Fit | Colours / fonts | Timing | Self-check | Edit | Notes |
+| Date | Example            | Plan / model | Loads | Plan | Output | Canvas | Safe zone | Fit | Colours / fonts | Timing | Self-check | Edit | Notes |
 | ---- | ------------------ | ------------ | ----- | ---- | ------ | ------ | --------- | --- | --------------- | ------ | ---------- | ---- | ----- |
 |      | youtube-promo      |              |       |      |        |        |           |     |                 |        |            |      |       |
 |      | reels-explainer-vo |              |       |      |        |        |           |     |                 |        |            |      |       |

@@ -33,10 +33,11 @@ Everything stays in your browser. Drafts autosave locally, share links carry the
 **In claude.ai or the Claude desktop app** (once per account):
 
 1. Open [Customize → Plugins](https://claude.ai/customize/plugins).
-2. Choose **Add → Add marketplace** and enter `Hirusha-Nikson/motion-brief`.
-3. Add **MotionBrief** from the list.
+2. Choose **Add → Add marketplace** and enter `Hirusha-Nikson/motion-brief`. This makes the plugin available but doesn't install it.
+3. Open the **Discover** tab, find **MotionBrief** and select **Add**. It then appears under **Yours**.
+4. In **Settings → Capabilities**, turn on **Code execution and file creation**. Claude renders the MP4 there.
 
-The plugin is saved to your account, so it also appears in Cowork and Claude Code.
+The plugin is saved to your account, so it also appears in Cowork and Claude Code. After an update, use the marketplace's **⋮ → Check for updates**.
 
 **In Claude Code:**
 
@@ -49,18 +50,28 @@ The plugin is saved to your account, so it also appears in Cowork and Claude Cod
 
 ### What works where
 
-| Part                                                          | Chat (web, desktop, mobile)             | Cowork                    | Claude Code |
-| ------------------------------------------------------------- | --------------------------------------- | ------------------------- | ----------- |
-| `motion-brief` skill: reads the prompt, plans, builds, checks | ✓                                       | ✓                         | ✓           |
-| `/motion-brief:build`, `:edit`, `:estimate`, `:check`         | ✓ (loaded as skills, from the `/` menu) | ✓                         | ✓           |
-| `scripts/brief_tool.py` brief checker                         | ✓ with code execution turned on         | ✓                         | ✓           |
-| Claude Motion animation                                       | Team and Enterprise plans               | Team and Enterprise plans | –           |
+| Part                                                          | Chat (web, desktop, mobile)               | Cowork                    | Claude Code |
+| ------------------------------------------------------------- | ----------------------------------------- | ------------------------- | ----------- |
+| `motion-brief` skill: reads the prompt, plans, builds, checks | ✓                                         | ✓                         | ✓           |
+| `/motion-brief:build`, `:edit`, `:estimate`, `:check`         | ✓ (loaded as skills, from the `/` menu)   | ✓                         | ✓           |
+| MP4 with voice-over, captions (SRT) and music                 | ✓ with code execution turned on, any plan | ✓                         | ✓           |
+| `scripts/brief_tool.py` brief checker                         | ✓ with code execution turned on           | ✓                         | ✓           |
+| Claude Motion animation (no audio)                            | Team and Enterprise plans                 | Team and Enterprise plans | –           |
 
-Without Claude Motion, the skill builds a self-contained HTML animation with play/pause and a scrubber, and says so. Sources: [Plugins](https://claude.com/docs/plugins/overview), [Plugin feature support](https://claude.com/docs/plugins/platform-support), [Get started with Claude Motion](https://support.claude.com/en/articles/17454997-get-started-with-claude-motion).
+Sources: [Plugins](https://claude.com/docs/plugins/overview), [Plugin feature support](https://claude.com/docs/plugins/platform-support), [Get started with Claude Motion](https://support.claude.com/en/articles/17454997-get-started-with-claude-motion).
 
 ### Using it
 
-Paste the prompt from the website into a new chat. Claude checks the brief, shows a script and scene plan with timings, on-screen text, narration and motion, and waits for **go**. It then builds the video and finishes with a `Checked: ✓ safe zone ✓ text fit ✓ contrast ✓ timing` line. To change something, ask in the same chat; Claude changes only that part.
+Paste the prompt from the website into a new chat. Claude checks the brief, shows a script and scene plan with timings, on-screen text, narration and motion, and waits for **go**. Then:
+
+1. **Render:** it renders the video with the bundled renderer (`scripts/render_video.py`). The renderer draws every scene in your fonts and colours inside the safe zone, generates the voice-over, and times each scene to the speech.
+2. **Approve websites:** when Claude asks to reach a website, approve it. PyPI installs the renderer's packages, and `speech.platform.bing.com` provides the natural voice. Fonts are bundled.
+3. **Download:** you get `video.mp4`, `captions.srt` and `narration.txt`, plus a `Checked: ✓ safe zone ✓ text fit ✓ contrast ✓ no overlaps ✓ timing` line from the renderer's own measurements.
+4. **Change it:** to change something, ask in the same chat. Claude edits only that scene and renders again, reusing the narration that didn't change.
+
+A 15–30 s video renders in about a minute; longer videos take roughly 1–3× their length.
+
+Claude Motion (Team and Enterprise) is used only for silent videos. Without code execution, Claude builds an HTML animation and tells you how to get the MP4.
 
 ## Development
 

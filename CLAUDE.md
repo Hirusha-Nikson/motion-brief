@@ -17,6 +17,7 @@ The site is an **AI-first prompt builder, not a scene editor**. It collects inte
 - **Audio:** ticks for voice-over (Claude writes the narration), captions, and music (empty genre = Claude picks).
 - **Export:** copy or download the prompt; brief.json and share link too.
 - **In Claude:** the skill writes the script (hook, scenes, on-screen text, narration, motion, facts), **asks the user to confirm the script**, then builds. That confirmation is the one allowed question.
+- **Output (2026-10-10, from testing on a Pro plan):** users want a downloadable MP4 with voice-over and an SRT. Claude Motion is Team/Enterprise-only and has no audio, so the default route renders an MP4 in the code sandbox with the bundled renderer; Claude Motion is only for silent videos.
 
 ## Principles
 
@@ -67,7 +68,7 @@ The site imports `@motionbrief/brief` from its source (Vite alias + tsconfig `pa
 
 `generate` rewrites the skill's generated references in `plugin/skills/motion-brief/refs/` (`motion-brief.schema.json`, `motion-edit.schema.json`, `platforms.md`, `styles.md`, `presets.json`) and every `examples/*/` file except `source.json`.
 
-The plugin lives in `plugin/`: `.claude-plugin/plugin.json`, the main `skills/motion-brief/` (SKILL.md, hand-written `refs/*.md`, `scripts/brief_tool.py`), and the command skills `build`, `edit`, `estimate` and `check`. The root `.claude-plugin/marketplace.json` lists it. `brief_tool.py` is stdlib-only Python and must agree with `packages/brief` (hash, validation); `packages/brief/src/plugin.test.ts` checks that, plus the documented plugin and skill rules. claude.ai chat ignores agents and hooks and refuses a top-level `bin/`. Run it after changing `packages/brief` or an example source; a test fails when they're stale. Never edit generated files by hand.
+The plugin lives in `plugin/`: `.claude-plugin/plugin.json`, the main `skills/motion-brief/` (SKILL.md, hand-written `refs/*.md`, `scripts/brief_tool.py`), and the command skills `build`, `edit`, `estimate` and `check`. The root `.claude-plugin/marketplace.json` lists it. `scripts/render_video.py` is the MP4 route: it reads `brief.json` plus a `motion-plan/v1` `plan.json` (schema in `packages/brief/src/plan.ts`) and renders video, voice-over (edge-tts → gTTS → espeak → none), captions + SRT, music and a self-check report. Its layouts mirror `apps/site/src/layout/sceneLayout.ts` and its sizes, roles and motion styles come from the generated `refs/render-config.json`; change both layouts together. Fonts are bundled in `assets/fonts/` (refresh with `node scripts/fetch-fonts.mjs` after changing `FONT_FAMILIES`). Bump `plugin.json` `version` on every plugin change, or installed copies stay pinned. `brief_tool.py` is stdlib-only Python and must agree with `packages/brief` (hash, validation); `packages/brief/src/plugin.test.ts` checks that, plus the documented plugin and skill rules. claude.ai chat ignores agents and hooks and refuses a top-level `bin/`. Run it after changing `packages/brief` or an example source; a test fails when they're stale. Never edit generated files by hand.
 
 ## Code conventions
 
