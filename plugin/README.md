@@ -1,13 +1,9 @@
-# MotionBrief Claude Code plugin
+# MotionBrief Claude plugin
 
-Placeholder. Built in Phase 5 (see `BUILD_PLAN.md`), following the current Claude Code plugin docs:
+Placeholder. Built in Phase 4 of `CLAUDE_CODE_PROMPT.md`, following the current official Claude plugin and skill docs:
 
 - `.claude-plugin/plugin.json`: plugin manifest
-- `skills/motion-video/`: `SKILL.md` + `refs/`
-- `commands/`: `/video`, `/video-edit`, `/video-estimate`, `/video-check`, `/video-render`, `/video-vo`
-- `agents/video-reviewer.md`
-- `hooks/hooks.json`
-- `template/`: Remotion project template the plugin scaffolds from
+- `skills/motion-brief/`: `SKILL.md`, `refs/` (generated `motion-brief.schema.json`, `platforms.md`, `checklist.md`, `motion-styles.md`, `scene-patterns.md`, `voiceover.md`) and `scripts/` (`check_frames`, `merge_audio`)
+- commands: `/motion-build`, `/motion-edit`, `/motion-estimate`, `/motion-check`
 
-The root `.claude-plugin/marketplace.json` (also Phase 5) lets users install with
-`/plugin marketplace add Hirusha-Nikson/motion-brief`.
+The root `.claude-plugin/marketplace.json` lets users add `Hirusha-Nikson/motion-brief` as a plugin marketplace. A build script also packages the skill alone as `dist/motion-brief-skill.zip` for upload.

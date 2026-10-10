@@ -1,7 +1,7 @@
 {
-  "name": "@motionbrief/motion-qa",
+  "name": "@motionbrief/brief",
   "version": "0.0.0",
-  "description": "Frame-checking QA for MotionBrief videos (CLI + library)",
+  "description": "Shared motion-brief/v1 schema, presets, defaults, estimate, prompt compiler and edit patches",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

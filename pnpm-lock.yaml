@@ -38,13 +38,7 @@ importers:
 
   apps/site: {}
 
-  packages/motion-kit: {}
-
-  packages/motion-qa: {}
-
-  packages/motion-schema: {}
-
-  packages/motion-voice: {}
+  packages/brief: {}
 
 packages:
 

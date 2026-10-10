@@ -2,4 +2,4 @@ dist
 coverage
 out
 pnpm-lock.yaml
-BUILD_PLAN.md
+CLAUDE_CODE_PROMPT.md
