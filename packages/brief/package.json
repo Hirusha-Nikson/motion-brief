@@ -17,6 +17,16 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "generate": "pnpm build && node scripts/generate.mjs"
+  },
+  "dependencies": {
+    "@noble/hashes": "^2.4.0",
+    "rfc6902": "^5.3.0",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1"
   }
 }

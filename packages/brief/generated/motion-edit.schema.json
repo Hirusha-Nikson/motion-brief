@@ -1,0 +1,174 @@
+{
+  "$id": "https://github.com/Hirusha-Nikson/motion-brief/schemas/motion-edit.v1.json",
+  "title": "motion-edit/v1",
+  "description": "An edit to a MotionBrief brief: an RFC 6902 JSON Patch over the brief without estimate and hash.",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schema": {
+      "type": "string",
+      "const": "motion-edit/v1"
+    },
+    "baseHash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "resultHash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "ops": {
+      "minItems": 1,
+      "maxItems": 500,
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "op": {
+                "type": "string",
+                "const": "add"
+              },
+              "path": {
+                "type": "string",
+                "pattern": "^(\\/([^~/]|~[01])*)*$"
+              },
+              "value": {}
+            },
+            "required": [
+              "op",
+              "path",
+              "value"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "op": {
+                "type": "string",
+                "const": "remove"
+              },
+              "path": {
+                "type": "string",
+                "pattern": "^(\\/([^~/]|~[01])*)*$"
+              }
+            },
+            "required": [
+              "op",
+              "path"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "op": {
+                "type": "string",
+                "const": "replace"
+              },
+              "path": {
+                "type": "string",
+                "pattern": "^(\\/([^~/]|~[01])*)*$"
+              },
+              "value": {}
+            },
+            "required": [
+              "op",
+              "path",
+              "value"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "op": {
+                "type": "string",
+                "const": "move"
+              },
+              "from": {
+                "type": "string",
+                "pattern": "^(\\/([^~/]|~[01])*)*$"
+              },
+              "path": {
+                "type": "string",
+                "pattern": "^(\\/([^~/]|~[01])*)*$"
+              }
+            },
+            "required": [
+              "op",
+              "from",
+              "path"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "op": {
+                "type": "string",
+                "const": "copy"
+              },
+              "from": {
+                "type": "string",
+                "pattern": "^(\\/([^~/]|~[01])*)*$"
+              },
+              "path": {
+                "type": "string",
+                "pattern": "^(\\/([^~/]|~[01])*)*$"
+              }
+            },
+            "required": [
+              "op",
+              "from",
+              "path"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "op": {
+                "type": "string",
+                "const": "test"
+              },
+              "path": {
+                "type": "string",
+                "pattern": "^(\\/([^~/]|~[01])*)*$"
+              },
+              "value": {}
+            },
+            "required": [
+              "op",
+              "path",
+              "value"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
+    "affectedScenes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9][a-z0-9-]{0,31}$"
+      }
+    },
+    "summary": {
+      "type": "string",
+      "maxLength": 8000
+    }
+  },
+  "required": [
+    "schema",
+    "baseHash",
+    "resultHash",
+    "ops",
+    "affectedScenes",
+    "summary"
+  ],
+  "additionalProperties": false
+}

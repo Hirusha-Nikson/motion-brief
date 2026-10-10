@@ -42,8 +42,11 @@ Run from the repo root (Node >= 22.12, pnpm 10):
 | Lint           | `pnpm lint`                                                  |
 | Format / check | `pnpm format` / `pnpm format:check`                          |
 | One package    | `pnpm --filter @motionbrief/<name> <build\|test\|typecheck>` |
+| Regenerate     | `pnpm --filter @motionbrief/brief generate`                  |
 
 Package names: `brief`, `site`.
+
+`generate` rewrites `packages/brief/generated/` (JSON Schemas, `platforms.md`) and every `examples/*/` file except `source.json`. Run it after changing `packages/brief` or an example source; a test fails when they're stale. Never edit generated files by hand.
 
 ## Code conventions
 
